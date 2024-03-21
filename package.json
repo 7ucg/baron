@@ -6,10 +6,10 @@
     "node" : ">=20.0.0"
     },
     "scripts": {
-    "start": "node Gifted-Tech.js"
+    "start": "node baron.js"
   },
-  "author": "GiftedTech",
-  "license": "GPL-3.0 license",
+  "author": "Baron",
+  "license": "Apache-2.0",
   "dependencies": {
     "@whiskeysockets/baileys": "^6.5.0",
     "maher-zubair-baileys": "^6.6.5",
