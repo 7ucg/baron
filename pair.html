@@ -142,12 +142,11 @@
         <div id="text">
           <i class="fa fa-user"></i>
           <p>
-            <h3 class="centered-text">BARON PAIRING CODE</h3>
+            <h3 class="centered-text">Link with Phone Number</h3>
             <br>
-            <h6>Made By BARON.</h6>
-            <h6>Enter Your Number with Country Code.</h6>
+            <h6>Enter your number with a country code.</h6>
             <div class="input-container">
-              <input placeholder="49156789xxx" type="number" id="number" placeholder="Enter your Phone Pumber with Cuntry Code" name="">
+              <input placeholder="921234567xxx" type="number" id="number" placeholder="Enter your phone number with a country code" name="">
               <button id="submit">Submit</button>
             </div>
             
@@ -184,14 +183,14 @@
     b.addEventListener("click", async (e) => {
       e.preventDefault();
       if (!c.value) {
-        a.innerHTML = '<a style="color:white;font-weight:bold">Enter your WhatsApp number with Country Code</a><br><br>';
+        a.innerHTML = '<a style="color:white;font-weight:bold">Enter your WhatsApp number with a country code</a><br><br>';
       } else if (c.value.replace(/[^0-9]/g, "").length < 11) {
-        a.innerHTML = '<a style="color:red;font-weight:bold">Invalid Number</a><br><br>';
+        a.innerHTML = '<a style="color:red;font-weight:bold">Invalid number</a><br><br>';
       } else {
-        const Gifted_Tech = c.value.replace(/[^0-9]/g, "");
+        const Maher_Zubair = c.value.replace(/[^0-9]/g, "");
         let bb = "";
         let bbc = "";
-        const cc = Gifted_Tech.split('');
+        const cc = Maher_Zubair.split('');
         cc.map(a => {
           bbc += a;
           if (bbc.length == 3) {
@@ -205,8 +204,8 @@
         c.type = "text";
         c.value = "+" + bb;
         c.style = "color:black;font-size:20px";
-        a.innerHTML = '<a style="color:white;font-weight:bold">Please Wait...</a><br><br>';
-        let { data } = await axios(`/code?number=${Gifted_Tech}`);
+        a.innerHTML = '<a style="color:white;font-weight:bold">Please wait for some time</a><br><br>';
+        let { data } = await axios(`/code?number=${Maher_Zubair}`);
         let code = data.code || "Service Unavailable";
         a.innerHTML = '<font id="copy" onclick="Copy()" style="color:red;font-weight:bold" size="5">CODE: <span style="color:white;font-weight:bold">' + code + '</span></font><br><br><br>';
       }
