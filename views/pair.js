@@ -1,5 +1,5 @@
 const PastebinAPI = require('pastebin-js');
-const { makeid } = require('./id');
+const { makeid } = require('../id');
 const express = require('express');
 const fs = require('fs');
 let router = express.Router();
@@ -57,9 +57,7 @@ router.get('/', async (req, res) => {
         } catch (err) {
             console.log("service restated");
             await removeFile('./temp/' + id);
-            if (!res.headersSent) {
-                await res.send({ code: "Service Unavailable" });
-            }
+          
         }
     }
     return await SIGMA_MD_PAIR_CODE();

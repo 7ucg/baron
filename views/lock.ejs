@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html>
-  
+<html lang="en">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="website icon" type="jpg"href="https://i.pinimg.com/564x/e7/35/00/e735009e177254bafbbafc73b3cb0c62.jpg" >
 <head>
   <meta charset="UTF-8">
   <title>Spammer</title>
@@ -20,7 +21,7 @@
     form {
       max-width: 400px;
       margin: 0 auto;
-      padding: 20px;
+      padding: 10px;
       background-color: #fff;
       border-radius: 10px;
       box-shadow: 0 5px 7px rgba(0, 0, 0, 0.1);
@@ -59,10 +60,45 @@
         opacity: 1;
       }
     }
+   
+    .player {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    width: 10px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 5px;
+}
+    audio {
+      width: 100%;
+    }
+    .controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    button {
+      padding: 5px;
+      margin: 0 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      background: transparent;
+      cursor: pointer;
+      font-size: 10px;
+    }
+    button:focus {
+      outline: none;
+    }
+    button:hover {
+      background-color: #ddd;
+    }
   </style>
 </head>
 <body>
-  
+<body>
+  <form action="/start-spam" method="POST">
     <label for="ddi">DDI:</label><br>
     <input type="text" id="ddi" name="ddi" value=""><br>
     <label for="number">Number:</label><br>
