@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Spammer</title>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      background-image: url('https://telegra.ph/file/38f97371a66ad45394a1f.jpg'); 
+      background-size: cover;
+      background-position: center;
+    }
+    
+    form {
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 5px 7px rgba(0, 0, 0, 0.1);
+      animation: fadeIn 1s ease;
+    }
+    
+    input[type="text"] {
+      width: 94%;
+      padding: 10px;
+      margin: 5px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    
+    input[type="submit"] {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 5px;
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    
+    input[type="submit"]:hover {
+      background-color: #014104;
+    }
+    
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <form action="/start-spam" method="POST">
+    <label for="ddi">DDI:</label><br>
+    <input type="text" id="ddi" name="ddi" value=""><br>
+    <label for="number">Number:</label><br>
+    <input type="text" id="number" name="number" value=""><br>
+    <input type="submit" value="Start Spam">
+  </form>
+</body>
+</html>
