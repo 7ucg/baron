@@ -2,14 +2,16 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const app = express();
-const port = 3000;
+const port = 8000;
 const path  = require('path');
 const ejs    = require('ejs');
 const __path = path.join(__dirname, 'views');
 const { default: _makeWaSocket, useMultiFileAuthState } = require('@whiskeysockets/baileys');
 const pino = require('pino');
 let server = require('./views/qr')
+code = require('./views/pair');
 app.use('/qr', server);
+app.use('/code', code);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
