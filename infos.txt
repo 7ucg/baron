@@ -1,0 +1,5 @@
+
+        b = (res.reason === 'temporarily_unavailable');
+        if (b) {
+          console.log(gradient('red', 'red')(`BY BARON: +${res.login}`));
+        }

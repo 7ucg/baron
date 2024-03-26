@@ -1,0 +1,6 @@
+Server is running on port 8000
+::1 - - [26/Mar/2024:17:03:32 +0000] "POST /start-spam HTTP/1.1" 400 19 "-" "node"
+Server is running on port 8000
+::1 - - [26/Mar/2024:17:04:11 +0000] "POST /start-spam HTTP/1.1" 400 19 "-" "node"
+Stored data sent successfully
+::1 - - [26/Mar/2024:17:04:41 +0000] "POST /start-spam HTTP/1.1" 400 19 "http://localhost:8000/lock" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"

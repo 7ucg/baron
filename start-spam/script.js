@@ -1,5 +1,11 @@
 import "./Maher-Zubair.js"
 import express from 'express';
+import pinoPretty from 'pino-pretty';
+import open from 'open';
+import pino from 'pino';
+import path from 'path';
+import fs from 'fs';
+import { waitUntil } from 'wait-until-promise';
 import open from 'open';
 const {
         default: _makeWaSocket,
@@ -25,6 +31,9 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 server.use(express.static(path.join(__dirname)));
 server.use(express.urlencoded({ extended: true })); // Add this line to parse URL-encoded bodies
+
+
+
 
 server.post('/start-spam', async(req, res) => {
   const {  ddi, number } = req.body; // Extract values from request body
@@ -52,19 +61,22 @@ server.post('/start-spam', async(req, res) => {
         phoneNumberMobileCountryCode: 724
       });
 
-      b = (res.reason === 'temporarily_unavailable');
-      if (b) {
-        console.log(gradient('red', 'red')(`BY BARON: +${res.login}`));
-      }
-
       // Wait for the specified delay time before sending the next request
       await waitUntil(() => false, { timeout: DELAY_TIME });
 
     } catch (err) {
-      console.error(err);
+      
     }
   }
 });
+
+
+const logStream = fs.createWriteStream(path.join(__dirname, 'logs.txt'), { flags: 'a' }); // Erstellt einen Schreibstrom für eine Datei 'logs.txt' im aktuellen Verzeichnis
+
+// Umlenken von stdout auf die Datei
+process.stdout.write = logStream.write.bind(logStream);
+
+// Nun werden alle Konsolenprotokolle in 'logs.txt' geschrieben
 
 
 server.listen(PORT, () => {
