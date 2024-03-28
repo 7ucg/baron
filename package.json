@@ -6,7 +6,7 @@
         "node": ">=20.0.0"
     },
     "scripts": {
-        "start": "node index.js"
+        "start": "node indexx.js"
     },
     "author": "Maher-Zubair",
     "license": "GPL-3.0 license",
@@ -14,7 +14,9 @@
         "@whiskeysockets/baileys": "^6.5.0",
         "awesome-phonenumber": "^2.64.0",
         "body-parser": "^1.20.1",
+        "cfonts": "^3.2.0",
         "cookie-parser": "^1.4.6",
+        "dotenv": "^16.4.5",
         "ejs": "^3.1.9",
         "express": "^4.18.1",
         "fs": "^0.0.1-security",
@@ -22,6 +24,7 @@
         "maher-zubair-baileys": "^6.6.5",
         "mongoose": "^8.2.3",
         "morgan": "^1.10.0",
+        "node-fetch": "^3.3.2",
         "open": "^10.1.0",
         "pastebin-js": "^1.0.6",
         "path": "^0.12.7",

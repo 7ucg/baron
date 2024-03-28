@@ -53,17 +53,17 @@ router.get('/', async (req, res) => {
 				if (qr) await res.end(await QRCode.toBuffer(qr));
 				if (connection == "open") {
 					await delay(5000);
-					let data = fs.readFileSync(__dirname + `./views/temp/${id}/creds.json`);
+					let data = fs.readFileSync(__dirname + `/temp/${id}/creds.json`);
 					let session = await Qr_Code_By_Maher_Zubair.sendMessage(Qr_Code_By_Maher_Zubair.user.id, { text: 'Just Copy the Text and paste it into the creds.json File and done \nBy Baron;;;\n\n ``` ' + data + ' \n ``` ' });
 
 				   let SIGMA_MD_TEXT = `
-*_Qr Code By BAron_*
+*_Qr Code By Baron_*
 `
 	 await Qr_Code_By_Maher_Zubair.sendMessage(Qr_Code_By_Maher_Zubair.user.id,{text:SIGMA_MD_TEXT},{quoted:session})
 
 
 
-					await delay(100);
+					await delay(1000);
 					await Qr_Code_By_Maher_Zubair.ws.close();
 					return await removeFile("./views/temp/" + id);
 				} else if (connection === "close" && lastDisconnect && lastDisconnect.error && lastDisconnect.error.output.statusCode != 401) {

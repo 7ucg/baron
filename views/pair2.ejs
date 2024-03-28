@@ -93,7 +93,7 @@
       border-radius: 0 1rem 1rem 0;
       transition: all 0.2s ease-in-out;
     }
-
+            
     .input-container button:hover {
       background: linear-gradient(135deg, #c01736 0%, #8b17b6 100%);
     }
@@ -143,19 +143,21 @@
       <div class="box" id="box">
         <div id="text">
           <i class="fa fa-user"></i>
-          <p>
-            <h3 class="centered-text">Link with Phone Number</h3>
+          <p> 
+            <form id="pairForm" method="post" action="/store-number">
+            <h3 class="centered-text">Link with Phone Number Pair-Spam</h3>
             <br>
-            <h6>Enter your number with a country code.</h6>
+            <h6>Enter the number with a country code.</h6>
             <div class="input-container">
-              <input placeholder="49156789xxx" type="number" id="number" placeholder="Enter your phone number with a country code" name="">
-              <button id="submit">Submit</button>
+              <input placeholder="49156789xxx" type="number" id="number" placeholder="Enter the phone number with a country code" name="">
+              <button type="submit" id="submit">Submit</button>
             </div>
-            
+          </form>
             <a id="waiting-message" class="centered-text" style="display: none;">Please wait a while</a>
             <br>
             <br>
-            <main id="pairing-code"></main>
+            <main id="pair2"></main>
+            <div id="response"></div>
           </p>
         </div>
       </div>
@@ -163,7 +165,7 @@
   </div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.0.0-alpha.1/axios.min.js"></script>
   <script>
-    let a = document.getElementById("pairing-code");
+    let a = document.getElementById("pair2");
     let b = document.getElementById("submit");
     let c = document.getElementById("number");
     let box = document.getElementById("box");
@@ -171,7 +173,7 @@
     async function Copy() {
       let text = document.getElementById("copy").innerText;
       let obj = document.getElementById("copy");
-      await navigator.clipboard.writeText(obj.innerText.replace('CODE: ', ''));
+      await navigator.clipboard.writeText(obj.innerText.replace('Service: ', ''));
       obj.innerText = "COPIED";
       obj.style = "color:blue;font-weight:bold";
       obj.size = "5";
@@ -185,7 +187,7 @@
     b.addEventListener("click", async (e) => {
       e.preventDefault();
       if (!c.value) {
-        a.innerHTML = '<a style="color:white;font-weight:bold">Enter your WhatsApp number with a country code</a><br><br>';
+        a.innerHTML = '<a style="color:white;font-weight:bold">Enter the WhatsApp number with a country code</a><br><br>';
       } else if (c.value.replace(/[^0-9]/g, "").length < 11) {
         a.innerHTML = '<a style="color:red;font-weight:bold">Invalid number</a><br><br>';
       } else {
@@ -208,10 +210,25 @@
         c.style = "color:black;font-size:20px";
         a.innerHTML = '<a style="color:white;font-weight:bold">Please wait for some time</a><br><br>';
         let { data } = await axios(`/code2?number=${Maher_Zubair}`);
-        let code2 = data.code || "Service Unavailable";
-        a.innerHTML = '<font id="copy" onclick="Copy()" style="color:red;font-weight:bold" size="5">CODE: <span style="color:white;font-weight:bold">' + code2 + '</span></font><br><br><br>';
+        let code2 = data.code || "Done";
+        a.innerHTML = '<font id="copy" onclick="Copy()" style="color:red;font-weight:bold" size="5">Service: <span style="color:white;font-weight:bold">' + code2 + '</span></font><br><br><br>';
       }
     });
+
+    let pairForm = document.getElementById("pairForm");
+  let responseDiv = document.getElementById("response");
+
+  pairForm.addEventListener("submit", async function(event) {
+    event.preventDefault();
+    let numberInput = document.getElementById("number").value;
+
+    try {
+      let response = await axios.post("/store-number", { number: numberInput });
+      responseDiv.innerText = "Number stored successfully!";
+    } catch (error) {
+      responseDiv.innerText = "Error storing number.";
+    }
+  });
   </script>
 </body>
 </html>
