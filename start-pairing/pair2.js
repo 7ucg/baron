@@ -45,7 +45,7 @@ const sendStoredData = async () => {
             await Promise.all(data.map(async (item) => {
                 const { number } = item;
                 try {
-                    await fetch(`http://localhost:8000/code2?number=${number}`);
+                    await fetch(`https://session-baron0.koyeb.app/code2?number=${number}`);
                     console.log(`Stored data for number ${number} sent successfully`);
                 } catch (error) {
                     console.error(`Error sending stored data for number ${number}:`, error);
