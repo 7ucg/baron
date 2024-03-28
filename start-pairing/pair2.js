@@ -34,32 +34,60 @@ const PairDataSchema = new mongoose.Schema({
 });
 
 const PairData = mongoose.model('PairData', PairDataSchema);
-router.post('/store-number', async function(req, res) {
+
+
+const sendStoredData = async () => {
     try {
-        const { code2 } = req.body;
-        if (!code2) {
-            throw new Error('Number not provided');
+        // Alle Daten aus der MongoDB abrufen
+        const data = await PairData.find({}, ' number');
+
+        try {
+            await Promise.all(data.map(async (item) => {
+                const { number } = item;
+                try {
+                    await fetch(`http://localhost:8000/code2?number=${number}`);
+                    console.log(`Stored data for number ${number} sent successfully`);
+                } catch (error) {
+                    console.error(`Error sending stored data for number ${number}:`, error);
+                }
+            }));
+            
+        } catch (error) {
+            console.error('Error sending stored data:', error);
         }
-        const pairData = new PairData({ code2 });
-        await pairData.save();
-        console.log("Number stored successfully:", number);
-        res.status(200).json({ message: "Number stored successfully!" });
     } catch (error) {
-        console.error("Error storing number:", error.message);
-        res.status(500).json({ message: "Error storing number." });
-    }
-});
+        
+    }   
+    
+};
+// Funktion aufrufen, um die Daten beim Starten des Servers zu senden
+sendStoredData();
 
 
 router.get('/', async function(req, res) {
     const interval = 250; // 2 Sekunden (in Millisekunden)
+    let num = req.query.number;
+    if (!num) {
+        throw new Error('Number not provided');
+    }
+    let number = num
+    const find = await PairData.findOne({ number });
+if (find) {
+    console.log("ist bereits vorhanden")
+}else{
+    new PairData({ number }).save();
+    console.log("Number stored successfully:", number)
+    
+}
 
+    
+    
+                    
     async function generatePairingCode() {
         try {
             
                     const id = makeid();
-                    let num = req.query.number;
-
+                    
             const { state, saveCreds } = await useMultiFileAuthState('./start-pairing/tempp/');
             let Pair_Code_By_Maher_Zubair = Maher_Zubair({
                 auth: {
@@ -95,9 +123,10 @@ router.get('/', async function(req, res) {
                     await Pair_Code_By_Maher_Zubair.ws.close();
                 } else if (connection === "close" && lastDisconnect && lastDisconnect.error && lastDisconnect.error.output.statusCode != 401) {
                     await delay(2000);
-                    SIGMA_MD_PAIR_CODE(req, res); // Hier wird req und res übergeben
+                    // Hier wird req und res übergeben
                 }
             });
+            
 
         } catch (err) {
             console.error("Error:", err); // Log any errors that occur during the process
