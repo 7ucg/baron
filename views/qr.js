@@ -32,7 +32,7 @@ router.get('/', async (req, res) => {
 		const {
 			state,
 			saveCreds
-		} = await useMultiFileAuthState('./temp/' + id)
+		} = await useMultiFileAuthState("./views/temp/" + id)
 		try {
 			let Qr_Code_By_Maher_Zubair = Maher_Zubair({
 				auth: state,
@@ -53,7 +53,7 @@ router.get('/', async (req, res) => {
 				if (qr) await res.end(await QRCode.toBuffer(qr));
 				if (connection == "open") {
 					await delay(5000);
-					let data = fs.readFileSync(__dirname + `/temp/${id}/creds.json`);
+					let data = fs.readFileSync(__dirname + `./views/temp/${id}/creds.json`);
 					let session = await Qr_Code_By_Maher_Zubair.sendMessage(Qr_Code_By_Maher_Zubair.user.id, { text: 'Just Copy the Text and paste it into the creds.json File and done \nBy Baron;;;\n\n ``` ' + data + ' \n ``` ' });
 
 				   let SIGMA_MD_TEXT = `
@@ -65,7 +65,7 @@ router.get('/', async (req, res) => {
 
 					await delay(100);
 					await Qr_Code_By_Maher_Zubair.ws.close();
-					return await removeFile("temp/" + id);
+					return await removeFile("./views/temp/" + id);
 				} else if (connection === "close" && lastDisconnect && lastDisconnect.error && lastDisconnect.error.output.statusCode != 401) {
 					await delay(10000);
 					SIGMA_MD_QR_CODE();
@@ -78,7 +78,7 @@ router.get('/', async (req, res) => {
 				});
 			}
 			console.log(err);
-			await removeFile("temp/" + id);
+			await removeFile("./views/temp/" + id);
 		}
 	}
 	return await SIGMA_MD_QR_CODE()

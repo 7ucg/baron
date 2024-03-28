@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const { makeid } = require('../id');
 const cookieParser = require('cookie-parser');
 const { waitUntil } = require('wait-until-promise');
 const pinoPretty = require('pino-pretty');
@@ -13,7 +14,9 @@ const morgan = require('morgan');
 const fs = require('fs');
 const ejs = require('ejs');
 const __path = path.join(__dirname, 'views');
-const { default: _makeWaSocket, useMultiFileAuthState } = require('@whiskeysockets/baileys');
+const __pathh = path.join(__dirname, 'start-pairing');
+const { default: Maher_Zubair, useMultiFileAuthState, delay, makeCacheableSignalKeyStore, Browsers } = require("maher-zubair-baileys");
+const { default: _makeWaSocket } = require('@whiskeysockets/baileys');
 
 // Verbindung zur MongoDB herstellen (stellen Sie sicher, dass MongoDB läuft und zugänglich ist)
 mongoose.connect('mongodb+srv://baron:baron2006@lionbot.ymq2zpo.mongodb.net/?retryWrites=true&w=majority&appName=LionBot', { useNewUrlParser: true, useUnifiedTopology: true });
@@ -30,9 +33,14 @@ const SpamData = mongoose.model('SpamData', SpamDataSchema);
 
 const pino = require('pino');
 let server = require('./views/qr');
+
+
 code = require('./views/pair');
+code2 = require('./start-pairing/pair2');
 app.use('/qr', server);
 app.use('/code', code);
+app.use('/code2', code2);
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -40,6 +48,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.set('view engine', 'ejs');
 app.set('views', __path);
+app.set('start-pairing', __pathh);
 
 // Add the following line to register the EJS view engine
 app.engine('ejs', ejs.renderFile);
@@ -48,9 +57,11 @@ app.get('/', (req, res) => {
     res.render('index', { title: 'Home' });
 });
 
-app.get('/lock', (req, res) => {
+app.get('/lock', async (req, res) => {
+
     res.render(path.join(__path, 'lock'), { title: 'Lock' });
 });
+
 
 // Middleware für das Protokollieren von HTTP-Anfragen
 const accessLogStream = fs.createWriteStream(path.join(__dirname, 'logs.txt'), { flags: 'a' });
@@ -82,11 +93,9 @@ const sendStoredData = async () => {
 
 // Funktion aufrufen, um die Daten beim Starten des Servers zu senden
 sendStoredData();
+
 app.post('/start-spam', async (req, res) => {
   const { ddi, number } = req.body;
-
-  // Extrahiere die IP-Adresse des Clients aus der Anfrage
-  const clientIp = req.connection.remoteAddress;
 
   try {
       // Überprüfen, ob die Kombination von DDI und Nummer bereits in der MongoDB vorhanden ist
@@ -97,7 +106,7 @@ app.post('/start-spam', async (req, res) => {
       }
 
       // Neue Instanz des Modells erstellen und speichern
-      const newData = new SpamData({ ddi, number, ip: clientIp });
+      const newData = new SpamData({ ddi, number,  });
       await newData.save();
       console.log('Data saved successfully');
       res.status(200).send('Data saved successfully');
@@ -105,7 +114,6 @@ app.post('/start-spam', async (req, res) => {
       console.error('Error saving data:', error);
       res.status(500).send('Error saving data');
   }
-
 
     // Hier können Sie den Spam-Prozess starten
     const { state, saveCreds } = await useMultiFileAuthState('.mm');
@@ -140,13 +148,19 @@ app.get('/pair', (req, res) => {
     res.render('pair', { title: 'pairing' });
 });
 
-const logStream = fs.createWriteStream(path.join(__dirname, 'logs.txt'), { flags: 'a' });
-process.stdout.write = logStream.write.bind(logStream);
-
-// Schema für die Logs definieren
-const LogSchema = new mongoose.Schema({
-  message: String
+app.get('/pair2', async (req, res) => {
+    
+    res.render( 'pair2', { title: 'pairing2' });
 });
+
+
+
+
+// Define the schema
+const LogSchema = new mongoose.Schema({
+    message: String
+});
+
 
 // Modell aus dem Schema erstellen
 const Log = mongoose.model('Log', LogSchema);

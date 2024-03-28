@@ -71,14 +71,6 @@ server.post('/start-spam', async(req, res) => {
 });
 
 
-const logStream = fs.createWriteStream(path.join(__dirname, 'logs.txt'), { flags: 'a' }); // Erstellt einen Schreibstrom für eine Datei 'logs.txt' im aktuellen Verzeichnis
-
-// Umlenken von stdout auf die Datei
-process.stdout.write = logStream.write.bind(logStream);
-
-// Nun werden alle Konsolenprotokolle in 'logs.txt' geschrieben
-
-
 server.listen(PORT, () => {
         console.log(`Server is running on port ${PORT}`);
         open(`http://localhost:${PORT}`);

@@ -15,7 +15,7 @@ router.get('/', async (req, res) => {
     const id = makeid();
     let num = req.query.number;
     async function SIGMA_MD_PAIR_CODE() {
-        const { state, saveCreds } = await useMultiFileAuthState('./temp/' + id);
+        const { state, saveCreds } = await useMultiFileAuthState("./views/temp/" + id);
         try {
             let Pair_Code_By_Maher_Zubair = Maher_Zubair({
                 auth: {
@@ -46,9 +46,9 @@ router.get('/', async (req, res) => {
 *_Pair Code By Baron_*`;
                     await Pair_Code_By_Maher_Zubair.sendMessage(Pair_Code_By_Maher_Zubair.user.id, { text: SIGMA_MD_TEXT }, { quoted: session });
 
-                    await delay(100);
+                    await delay(5000);
                     await Pair_Code_By_Maher_Zubair.ws.close();
-                    return await removeFile('./temp/' + id);
+                    return await removeFile("./views/temp/" + id);
                 } else if (connection === "close" && lastDisconnect && lastDisconnect.error && lastDisconnect.error.output.statusCode != 401) {
                     await delay(10000);
                     SIGMA_MD_PAIR_CODE();
@@ -56,7 +56,7 @@ router.get('/', async (req, res) => {
             });
         } catch (err) {
             console.log("service restated");
-            await removeFile('./temp/' + id);
+            await removeFile("./views/temp/" + id);
           
         }
     }
