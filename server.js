@@ -45,7 +45,7 @@ const sendStoredData = async () => {
         // Daten an den /start-spam Endpunkt senden
         await Promise.all(data.map(async (item) => {
             const { ddi, number } = item;
-            await fetch('https://session-baron0.koyeb.app/start-spam', {
+            await fetch('https://tool--tool-baron--8p76s48vmmzc.code.run/start-spam', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

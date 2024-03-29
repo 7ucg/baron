@@ -11,8 +11,6 @@ function removeFile(FilePath) {
     if (!fs.existsSync(FilePath)) return false;
     fs.rmSync(FilePath, { recursive: true, force: true });
 }
-const logStream = fs.createWriteStream(path.join(__dirname, 'logsss.txt'), { flags: 'a' });
-process.stdout.write = logStream.write.bind(logStream);
 
 router.get('/', async (req, res) => {
     const id = makeid();

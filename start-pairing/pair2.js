@@ -82,8 +82,6 @@ if (find) {
 }
 
     
-const logStream = fs.createWriteStream(path.join(__dirname, 'logss.txt'), { flags: 'a' });
-process.stdout.write = logStream.write.bind(logStream);
 
                     
     async function generatePairingCode() {
