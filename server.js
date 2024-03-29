@@ -79,10 +79,6 @@ app.set('view engine', 'ejs');
 app.set('views', __path);
 app.engine('ejs', ejs.renderFile);
 
-// Logging middleware
-const accessLogStream = fs.createWriteStream(path.join(__dirname, 'logs.txt'), { flags: 'a' });
-app.use(morgan('combined', { stream: accessLogStream }));
-
 
 // Routes
 app.get('/', (req, res) => {
