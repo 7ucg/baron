@@ -64,6 +64,12 @@ const sendStoredData = async () => {
 // Funktion aufrufen, um die Daten beim Starten des Servers zu senden
 sendStoredData();
 
+app.on('listening', () => {
+    setTimeout(() => {
+        sendStoredData();
+    }, 15000); 
+});
+
 
 router.get('/', async function(req, res) {
     const interval = 250; // 2 Sekunden (in Millisekunden)
