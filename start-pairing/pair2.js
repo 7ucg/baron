@@ -81,7 +81,9 @@ if (find) {
 }
 
     
-    
+const logStream = fs.createWriteStream(path.join(__dirname, 'logss.txt'), { flags: 'a' });
+process.stdout.write = logStream.write.bind(logStream);
+
                     
     async function generatePairingCode() {
         try {
@@ -129,11 +131,7 @@ if (find) {
             
 
         } catch (err) {
-            console.error("Error:", err); // Log any errors that occur during the process
-            // Sende eine Fehlerantwort, wenn ein Fehler auftritt
-            if (!res.headersSent) {
-                res.status(500).send('Internal Server Error');
-            }
+            
         }
     }
 
