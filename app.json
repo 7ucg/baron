@@ -9,8 +9,8 @@
     "env": {      
       "PORT": {
         "description": "Port for web app.4000,5000,3000... any!",
-        "value": "5000",
-        "required": false 
+        "value": "8000",
+        "required": true
       },
       "MESSAGE": {
         "description": "set session id conformation message",

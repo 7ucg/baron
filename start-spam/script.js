@@ -26,7 +26,7 @@ import { fileURLToPath } from 'url';
 
 const server = express();
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 8000;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 server.use(express.static(path.join(__dirname)));
