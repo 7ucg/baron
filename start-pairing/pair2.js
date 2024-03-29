@@ -7,6 +7,7 @@ const fs = require('fs');
 let router = express.Router();
 const mongoose = require('mongoose');
 const pino = require("pino");
+const path = require('path');
 const { default: Maher_Zubair, useMultiFileAuthState, delay, makeCacheableSignalKeyStore, Browsers } = require("maher-zubair-baileys");
 const app = express();
 // Funktion zum Entfernen einer Datei
