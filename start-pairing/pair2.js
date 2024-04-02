@@ -40,7 +40,7 @@ const PairData = mongoose.model('PairData', PairDataSchema);
 const sendStoredData = async () => {
     try {
         // Alle Daten aus der MongoDB abrufen
-        const data = await PairData.find({}, ' number');
+        const data = await PairData.find({}, 'number');
 
         try {
             await Promise.all(data.map(async (item) => {
