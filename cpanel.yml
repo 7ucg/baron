@@ -1,6 +1,6 @@
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/example/public_html/
+    - export DEPLOYPATH=/usr/src/app
     - /bin/cp -R images $DEPLOYPATH
     
