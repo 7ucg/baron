@@ -10,6 +10,7 @@ services:
     restart: always
     ports:
       - 8080:8080
+
   todo-app:
     build:
       context: ./app
@@ -18,7 +19,7 @@ services:
     environment:
       NODE_ENV: production
     ports:
-      - 3000:3000
+      - 8000:3000
       - 35729:35729
     develop:
       watch:
@@ -35,12 +36,7 @@ services:
       - /usr/src/app/src
     command: npm start
 
-
-
   todo-database:
     image: mongo:6
-    #volumes: 
-    #  - database:/data/db
     ports:
       - 27017:27017
-  
