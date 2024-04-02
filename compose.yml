@@ -1,4 +1,15 @@
 services:
+  db:
+    image: mariadb
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: baron
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
   todo-app:
     build:
       context: ./app
@@ -16,6 +27,15 @@ services:
         - path: ./app
           target: /usr/src/app
           action: sync
+    volumes:
+      - ./app:/usr/src/app
+      - /usr/src/app/node_modules
+      - /usr/src/app/public
+      - /usr/src/app/views
+      - /usr/src/app/src
+    command: npm start
+
+
 
   todo-database:
     image: mongo:6
