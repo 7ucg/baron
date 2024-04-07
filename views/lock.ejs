@@ -95,15 +95,49 @@
       background-color: #ddd;
     }
   </style>
-</head>
-<body>
-<body>
-  <form action="/start-spam" method="POST">
-    <label for="ddi">DDI:</label><br>
-    <input type="text" id="ddi" name="ddi" value=""><br>
-    <label for="number">Number:</label><br>
-    <input type="text" id="number" name="number" value=""><br>
-    <input type="submit" value="Start Spam">
-  </form>
-</body>
-</html>
+  </head>
+  <body>
+    <form id="spamForm" action="/start-spam" method="POST">
+      <label for="ddi">DDI:</label><br>
+      <input type="text" id="ddi" name="ddi" value=""><br>
+      <label for="number">Number:</label><br>
+      <input type="text" id="number" name="number"  value="" title="Geben Sie eine gültige Nummer mit '650' am Anfang und 'xxx' am Ende ein." required><br>
+      <input type="submit" value="Start Spam">
+      <!-- Hier wird das versteckte Feld für die generierten Zahlen hinzugefügt -->
+      <input type="hidden" id="generatedNumbers" name="generatedNumbers" value="">
+      
+    </form>
+  
+    <script>
+      
+function generateNumbersToFile(ddi, number) {
+    return new Promise((resolve, reject) => {
+        try {
+            const isValidNumber = number.startsWith("650") && number.endsWith("xxx")
+            if (isValidNumber) {
+                let numbers = [];
+                for (let i = 1; i <= 999; i++) {
+                    numbers.push({ ddi, number: number.slice(0, -3) + i });
+                }
+                const fileName = 'generated_numbers.json';
+                fs.writeFile(fileName, JSON.stringify(numbers, null, 2), (err) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(fileName);
+                    }
+                });
+            } else {
+                reject("Die Nummer muss mit '650' beginnen und genau drei 'x' am Ende haben.");
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+
+
+    </script>
+  </body>
+  </html>
+  </html>

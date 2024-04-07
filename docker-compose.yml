@@ -2,6 +2,8 @@ services:
   db:
     image: mariadb
     restart: always
+    ports:
+      - 3080:3080
     environment:
       MARIADB_ROOT_PASSWORD: baron
 
@@ -13,28 +15,15 @@ services:
 
   todo-app:
     build:
-      context: ./app
+      context: ./
+      dockerfile: Dockerfile
     depends_on:
       - todo-database
     environment:
       NODE_ENV: production
     ports:
-      - 8000:3000
+      - 8000:8000
       - 35729:35729
-    develop:
-      watch:
-        - path: ./app/package.json
-          action: rebuild
-        - path: ./app
-          target: /usr/src/app
-          action: sync
-    volumes:
-      - ./app:/usr/src/app
-      - /usr/src/app/node_modules
-      - /usr/src/app/public
-      - /usr/src/app/views
-      - /usr/src/app/src
-    command: npm start
 
   todo-database:
     image: mongo:6

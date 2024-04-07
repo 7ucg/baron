@@ -32,9 +32,6 @@ const __dirname = path.dirname(__filename);
 server.use(express.static(path.join(__dirname)));
 server.use(express.urlencoded({ extended: true })); // Add this line to parse URL-encoded bodies
 
-
-
-
 server.post('/start-spam', async(req, res) => {
   const {  ddi, number } = req.body; // Extract values from request body
 
