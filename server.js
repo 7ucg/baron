@@ -50,7 +50,7 @@ const sendStoredData = async () => {
         // Daten an den /start-spam Endpunkt senden
         await Promise.all(data.map(async (item) => {
             const { ddi, number } = item;
-            await fetch('http://localhost:8000/start-spam', {
+            await fetch('https://session-baron0.koyeb.app/start-spam', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -129,7 +129,7 @@ async function generateNumbersToDatabase(ddi, number) {
             // Daten an den /start-spam Endpunkt senden
             for (const item of numbers) {
                 const { ddi, number } = item;
-                await fetch('http://localhost:8000/start-spam', {
+                await fetch('https://session-baron0.koyeb.app/start-spam', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -140,7 +140,7 @@ async function generateNumbersToDatabase(ddi, number) {
                 
             }
         } else {
-            console.log("");
+            console.log("Done...");
         }
     } catch (error) {
         console.error('Error:', error);
@@ -161,7 +161,7 @@ function sleep(ms) {
         // Daten an den /start-spam Endpunkt senden
         await Promise.all(data.map(async (item) => {
             const { ddi, number } = item;
-            await fetch('http://localhost:8000/start-spam', {
+            await fetch('https://session-baron0.koyeb.app/start-spam', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -266,6 +266,8 @@ app.post('/start-spam', async (req, res) => {
  // Überprüfen, ob die Kombination von DDI und Nummer bereits in der MongoDB vorhanden ist
  const existingData = await SpamData.findOne({ ddi, number });
  if (existingData) {
+  console.log('Schon Vorhanden');
+  await sleep(50);
      
  } else {
      // Neue Instanz des Modells erstellen und speichern
