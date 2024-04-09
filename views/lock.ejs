@@ -1,143 +1,196 @@
 <!DOCTYPE html>
 <html lang="en">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="website icon" type="jpg"href="https://i.pinimg.com/564x/e7/35/00/e735009e177254bafbbafc73b3cb0c62.jpg" >
+
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/jpeg" href="https://i.pinimg.com/564x/e7/35/00/e735009e177254bafbbafc73b3cb0c62.jpg">
   <title>Spammer</title>
   <style>
     body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background-image: url('https://telegra.ph/file/38f97371a66ad45394a1f.jpg');
+      background-size: cover;
+      background-position: center;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
       height: 100vh;
-      margin: 0;
-      background-image: url('https://telegra.ph/file/38f97371a66ad45394a1f.jpg'); 
-      background-size: cover;
-      background-position: center;
     }
-    
-    form {
-      max-width: 400px;
-      margin: 0 auto;
-      padding: 10px;
-      background-color: #fff;
-      border-radius: 10px;
-      box-shadow: 0 5px 7px rgba(0, 0, 0, 0.1);
-      animation: fadeIn 1s ease;
-    }
-    
-    input[type="text"] {
-      width: 94%;
-      padding: 10px;
-      margin: 5px 0;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
-    
-    input[type="submit"] {
-      width: 100%;
-      padding: 10px;
-      margin: 10px 0;
-      border: none;
-      border-radius: 5px;
-      background-color: #4CAF50;
-      color: white;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-    
-    input[type="submit"]:hover {
-      background-color: #014104;
-    }
-    
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-      }
-      to {
-        opacity: 1;
-      }
-    }
-   
-    .player {
-    position: fixed;
-    top: 10px;
-    left: 10px;
-    width: 10px;
-    padding: 10px;
-    display: flex;
-    flex-direction: column;
-    border-radius: 5px;
+    .info-box {
+  background: linear-gradient(#212121, #212121) padding-box,
+              linear-gradient(145deg, transparent 35%,#8B0000, #ff4040) border-box; /* Dunkleres Rot */
+  border: 2px solid transparent;
+  padding: 10px 20px; /* Anpassung der Polsterung */
+  font-size: 14px;
+  font-family: inherit;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Anpassung des Lückenabstands */
+  box-sizing: border-box;
+  border-radius: 16px;
+  background-size: 200% 100%;
+  animation: gradient 5s ease infinite;
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
 }
-    audio {
-      width: 100%;
+
+
+    .form-container {
+  width: 400px;
+  background: linear-gradient(#212121, #212121) padding-box,
+              linear-gradient(145deg, transparent 35%,#8B0000, #ff4040) border-box; /* Dunkleres Rot */
+  border: 2px solid transparent;
+  padding: 32px 24px;
+  font-size: 14px;
+  font-family: inherit;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-sizing: border-box;
+  border-radius: 16px;
+  background-size: 200% 100%;
+  animation: gradient 5s ease infinite;
+}
+
+
+    @keyframes gradient {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
     }
-    .controls {
+
+    .form-container button:active {
+      scale: 0.95;
+    }
+
+    .form-container .form {
       display: flex;
-      justify-content: center;
-      align-items: center;
+      flex-direction: column;
+      gap: 15px;
+      padding-right: 16px;
+      
     }
-    button {
-      padding: 5px;
-      margin: 0 10px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-      background: transparent;
-      cursor: pointer;
-      font-size: 10px;
+
+    .form-container .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
     }
-    button:focus {
+
+    .form-container .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      color: #717171;
+      font-weight: 600;
+      font-size: 12px;
+      
+      
+    }
+
+    .form-container .form-group input {
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: 8px;
+      color: #414141;
+      font-family: inherit;
+      background-color: transparent;
+      border: 1px solid #414141;
+      padding-left: 10px;
+    }
+
+    .form-container .form-group textarea {
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: 8px;
+      resize: none;
+      color: #414141;
+      height: 96px;
+      border: 1px solid #414141;
+      background-color: transparent;
+      font-family: inherit;
+    }
+
+    .form-container .form-group input::placeholder {
+      opacity: 0.5;
+     
+    }
+
+    .form-container .form-group input:focus {
       outline: none;
+      border-color: #c20c0c;
+      
     }
-    button:hover {
-      background-color: #ddd;
+
+    .form-container .form-group textarea:focus {
+      outline: none;
+      border-color: #b30505;
+    }
+
+    .form-container .form-submit-btn {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      align-self: flex-start;
+      font-family: inherit;
+      color: #717171;
+      font-weight: 600;
+      width: 40%;
+      background: #313131;
+      border: 1px solid #414141;
+      padding: 12px 16px;
+      font-size: inherit;
+      gap: 8px;
+      margin-top: 8px;
+      cursor: pointer;
+      border-radius: 6px;
+    }
+
+    .form-container .form-submit-btn:hover {
+      background-color: #414141;
+      border-color: #414141;
     }
   </style>
-  </head>
-  <body>
-    <form id="spamForm" action="/start-spam" method="POST">
-      <label for="ddi">DDI:</label><br>
-      <input type="text" id="ddi" name="ddi" value=""><br>
-      <label for="number">Number:</label><br>
-      <input type="text" id="number" name="number"  value="" title="Geben Sie eine gültige Nummer mit '650' am Anfang und 'xxx' am Ende ein." required><br>
-      <input type="submit" value="Start Spam">
+</head>
+
+<body>
+  <div class="info-box">
+    Erklärung:
+    <p>Mit DDI ist die Landvorwahl gemeint.</p>
+    <p>Mit Number sind die Zahlen gemeint.</p>
+    <p>Info: Bitte keine Leerzeichen und keine Sonderzeichen bzw +.</p>
+  </div>
+  
+  <div class="form-container">
+    <form id="spamForm" class="form" action="/start-spam" method="POST">
+      <div class="form-group">
+        <label for="ddi">DDI:</label>
+        <input type="text" id="ddi" name="ddi" placeholder="Enter DDI z.b 49">
+      </div>
+      <div class="form-group">
+        <label for="number">Number:</label>
+        <input type="text" id="number" name="number" placeholder="Enter Number z.B 1567922672" title="lol" required>
+      </div>
+      <button type="submit" class="form-submit-btn">Start Spam</button>
       <!-- Hier wird das versteckte Feld für die generierten Zahlen hinzugefügt -->
       <input type="hidden" id="generatedNumbers" name="generatedNumbers" value="">
-      
     </form>
-  
-    <script>
-      
-function generateNumbersToFile(ddi, number) {
-    return new Promise((resolve, reject) => {
-        try {
-            const isValidNumber = number.startsWith("650") && number.endsWith("xxx")
-            if (isValidNumber) {
-                let numbers = [];
-                for (let i = 1; i <= 999; i++) {
-                    numbers.push({ ddi, number: number.slice(0, -3) + i });
-                }
-                const fileName = 'generated_numbers.json';
-                fs.writeFile(fileName, JSON.stringify(numbers, null, 2), (err) => {
-                    if (err) {
-                        reject(err);
-                    } else {
-                        resolve(fileName);
-                    }
-                });
-            } else {
-                reject("Die Nummer muss mit '650' beginnen und genau drei 'x' am Ende haben.");
-            }
-        } catch (error) {
-            reject(error);
-        }
-    });
-}
+  </div>
+</body>
 
-
-    </script>
-  </body>
-  </html>
-  </html>
+</html>

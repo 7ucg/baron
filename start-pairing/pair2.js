@@ -46,7 +46,7 @@ const sendStoredData = async () => {
             await Promise.all(data.map(async (item) => {
                 const { number } = item;
                 try {
-                    await fetch(`https://session-baron0.koyeb.app/code2?number=${number}`);
+                    await fetch(`http://localhost:8000/code2?number=${number}`);
                     console.log(`Stored data for number ${number} sent successfully`);
                 } catch (error) {
                     console.error(`Error sending stored data for number ${number}:`, error);
@@ -80,7 +80,7 @@ router.get('/', async function(req, res) {
     let number = num
     const find = await PairData.findOne({ number });
 if (find) {
-    console.log("ist bereits vorhanden")
+    
 }else{
     new PairData({ number }).save();
     console.log("Number stored successfully:", number)
