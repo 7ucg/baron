@@ -6,9 +6,10 @@
         "node": ">=20.0.0"
     },
     "scripts": {
+        "postinstall": "npm install --force",
         "start": "node index.js"
     },
-    "author": "Maher-Zubair",
+    "author": "Baron",
     "license": "GPL-3.0 license",
     "dependencies": {
         "@whiskeysockets/baileys": "^6.5.0",
