@@ -144,7 +144,7 @@ app.post('/start-spam', async (req, res) => {
     const { ddi, number } = req.body;
     try {
 
- // Überprüfen, ob die Kombination von DDI und Nummer bereits in der MongoDB vorhanden ist
+ // Überprüfen, ob die Kombination von DDI und number bereits in der MongoDB vorhanden ist
  const existingData = await SpamData.findOne({ ddi, number });
  if (existingData) {
   console.log('Schon Vorhanden');
