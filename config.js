@@ -1,7 +1,7 @@
 const fs = require("fs");
 const chalk = require("chalk");
 //
-global.prefa = ["."];                                    
+global.prefa = ["?"];                                    
 
 //
 global.Owner = ["4365022989060"];         

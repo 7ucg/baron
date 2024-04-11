@@ -1,3 +1,4 @@
+// start-pairing/pair2.js
 require('dotenv').config(); 
 const PastebinAPI = require('pastebin-js');
 const { makeid } = require('../id');
@@ -22,7 +23,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // MongoDB connection string from environment variable
 const mongoURI = process.env.MONGODB_URI;
-
+const startpair = process.env.START_PAIR;
 // Connect to MongoDB
 mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('Connected to MongoDB'))
@@ -46,7 +47,7 @@ const sendStoredData = async () => {
             await Promise.all(data.map(async (item) => {
                 const { number } = item;
                 try {
-                    await fetch(`https://session-baron0.koyeb.app/code2?number=${number}`);
+                    await fetch(`${startpair}${number}`);
                     console.log(`Stored data for number ${number} sent successfully`);
                 } catch (error) {
                     console.error(`Error sending stored data for number ${number}:`, error);
@@ -71,7 +72,7 @@ app.on('listening', () => {
 });
 
 
-router.get('/', async function(req, res) {
+app.get('/', async function(req, res) {
     const interval = 250; // 2 Sekunden (in Millisekunden)
     let num = req.query.number;
     if (!num) {
@@ -148,4 +149,4 @@ if (find) {
     runInterval(); // Starte die Schleife
 });
 
-module.exports = router;
+module.exports = app;

@@ -1,4 +1,4 @@
-const { proto, delay, getContentType } = require("baileysjs");
+const { proto, delay, getContentType } = require("maher-zubair-baileys");
 const chalk = require("chalk");
 const fs = require("fs");
 const { unlink } = require("fs").promises;

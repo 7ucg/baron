@@ -1,4 +1,4 @@
-const { initAuthCreds, BufferJSON, proto } = require("baileysjs");
+const { initAuthCreds, BufferJSON, proto } = require("maher-zubair-baileys");
 const Database = require("./AuthDB");
 
 module.exports = class Authenication {

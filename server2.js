@@ -1,3 +1,33 @@
+require('dotenv').config(); // Load environment variables from .env file
+const express = require('express');
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const path = require('path');
+const gradient = require('gradient-string');
+const QRCode = require('qrcode');
+const mongoose = require('mongoose');
+const morgan = require('morgan');
+const fs = require('fs');
+const ejs = require('ejs');
+const pino = require('pino');
+const yargs = require('yargs/yargs')
+const cluster = require('cluster')
+const package = require('./package.json')
+const Readline = require('readline')
+const rl = Readline.createInterface(process.stdin, process.stdout)
+const { default: makeWaSocket, useMultiFileAuthState } = require('@whiskeysockets/baileys');
+const { promisify } = require('util');
+const readFileAsync = promisify(fs.readFile);
+
+const app = express();
+const port = process.env.PORT || 8000; // Use environment variable or default port
+
+// MongoDB connection string from environment variable
+const mongoURI = process.env.MONGODB_URI;
+const startspam = process.env.START_SPAM;
+
+
+///////////////////////
 
 require("./Configurations");
 const {
@@ -7,7 +37,7 @@ const {
   downloadContentFromMessage,
   makeInMemoryStore,
   jidDecode,
-} = require("baileysjs");
+} = require("maher-zubair-baileys");
 const figlet = require("figlet");
 const { join } = require("path");
 // Statt require verwenden wir nun import
@@ -21,7 +51,7 @@ const FileType = require("file-type");
 const { Boom } = require("@hapi/boom");
 const { serialize, WAConnection } = require("./System/whatsapp.js");
 const { smsg, getBuffer, getSizeMedia } = require("./System/Function2");
-const PORT2 = global.port2;
+
 const welcomeLeft = require("./System/Welcome.js");
 const { readcommands, commands } = require("./System/ReadCommands.js");
 commands.prefix = global.prefa;
@@ -30,8 +60,8 @@ const qrcode = require("qrcode");
 const {
   getPluginURLs, // -------------------- GET ALL PLUGIN DATA FROM DATABASE
 } = require("./System/MongoDB/MongoDb_Core.js");
-const appp = express();
-const port2 = process.env.PORT2 || 10000; // Use environment variable or default port =
+;
+ // Use environment variable or default port =
 const chalk = require("chalk");
 const store = makeInMemoryStore({
   logger: pino().child({
@@ -79,7 +109,7 @@ const startAtlas = async () => {
   const Atlas = atlasConnect({
     logger: pino({ level: "silent" }),
     printQRInTerminal: true,
-    browser: ["Atlas", "Safari", "1.0.0"],
+    browser: ["Baron Bot", "Safari", "1.0.0"],
     auth: state,
     version,
   });
@@ -142,6 +172,7 @@ const startAtlas = async () => {
     if (connection) {
       console.info(`[ ATLAS ] Server Status => ${connection}`);
     }
+    
 
     if (connection === "close") {
       let reason = new Boom(lastDisconnect?.error)?.output.statusCode;
@@ -407,9 +438,11 @@ const startAtlas = async () => {
 
 startAtlas();
 
-appp.use("/", express.static(join(__dirname, "Frontend")));
 
-appp.get("/qrr", async (req, res) => {
+
+app.use("/bot", express.static(join(__dirname, "Frontend")));
+
+app.get("/bott", async (req, res) => {
   const { session } = req.query;
   if (!session)
     return void res
@@ -431,19 +464,9 @@ appp.get("/qrr", async (req, res) => {
       .end();
   res.setHeader("content-type", "image/png");
   res.send(await qrcode.toBuffer(QR_GENERATE));
+  
 });
 
 
 
 ///////////////////////
-
-// Error handling middleware
-appp.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).send('Something broke!');
-});
-
-// Start server
-appp.listen(port2, () => {
-  console.log(`Server is running on port ${port2}`);
-});
