@@ -19,7 +19,7 @@ const {
         WAMessageStubType,
         extractMessageContent,
         useMultiFileAuthState
-    } = (await import('@whiskeysockets/baileys')).default
+    } = (await import('maher-zubair-baileys')).default
     import pino from 'pino';
 import path from 'path';
 import { fileURLToPath } from 'url';

@@ -14,7 +14,7 @@ const cluster = require('cluster')
 const package = require('./package.json')
 const Readline = require('readline')
 const rl = Readline.createInterface(process.stdin, process.stdout)
-const { default: makeWaSocket, useMultiFileAuthState } = require('@whiskeysockets/baileys');
+const { default: makeWaSocket, useMultiFileAuthState } = require('maher-zubair-baileys');
 const { promisify } = require('util');
 const readFileAsync = promisify(fs.readFile);
 
