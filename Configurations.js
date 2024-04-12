@@ -16,7 +16,7 @@ global.tenorApiKey = process.env.TENOR_API_KEY || "AIzaSyCyouca1_KKy4W_MG1xsPzuk
 global.packname = process.env.PACKNAME || `Baron`;
 global.author = process.env.AUTHOR || "by: Baron";
 global.port2 = process.env.PORT2 || "10000";
-global.openAiAPI = process.env.OPENAI_API || "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";
+global.openAiAPI = process.env.OPENAI_API || "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";
 global.owner = gg.split(",");
 
 
