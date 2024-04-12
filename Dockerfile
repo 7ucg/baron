@@ -11,12 +11,10 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 
-RUN pip3 install speedtest-cli
-
 WORKDIR /usr/src/app
 
 COPY package.json .
-RUN npm install --force
+RUN npm install 
 
 COPY . .
 
