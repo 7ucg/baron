@@ -204,6 +204,8 @@ app.on('listening', () => {
 });
 ///////////////
 
+///////////////////////
+
 require("./Configurations");
 const {
   default: atlasConnect,
@@ -339,56 +341,59 @@ const startAtlas = async () => {
   }
 
   await readcommands();
-
   Atlas.ev.on("creds.update", saveState);
   Atlas.serializeM = (m) => smsg(Atlas, m, store);
-  Atlas.ev.on("connection.update", async (update) => {
-    const { lastDisconnect, connection, qr } = update;
-    if (connection) {
-      console.info(`[ ATLAS ] Server Status => ${connection}`);
-    }
-    
-
-    if (connection === "close") {
-      let reason = new Boom(lastDisconnect?.error)?.output.statusCode;
-      if (reason === DisconnectReason.badSession) {
-        console.log(
-          `[ ATLAS ] Bad Session File, Please Delete Session and Scan Again.\n`
-        );
-        process.exit();
-      } else if (reason === DisconnectReason.connectionClosed) {
-        console.log("[ ATLAS ] Connection closed, reconnecting....\n");
-        startAtlas();
-      } else if (reason === DisconnectReason.connectionLost) {
-        console.log("[ ATLAS ] Connection Lost from Server, reconnecting...\n");
-        startAtlas();
-      } else if (reason === DisconnectReason.connectionReplaced) {
-        console.log(
-          "[ ATLAS ] Connection Replaced, Another New Session Opened, Please Close Current Session First!\n"
-        );
-        process.exit();
-      } else if (reason === DisconnectReason.loggedOut) {
-        clearState();
-        console.log(
-          `[ ATLAS ] Device Logged Out, Please Delete Session and Scan Again.\n`
-        );
-        process.exit();
-      } else if (reason === DisconnectReason.restartRequired) {
-        console.log("[ ATLAS ] Server Restarting...\n");
-        startAtlas();
-      } else if (reason === DisconnectReason.timedOut) {
-        console.log("[ ATLAS ] Connection Timed Out, Trying to Reconnect...\n");
-        startAtlas();
-      } else {
-        console.log(
-          `[ ATLAS ] Server Disconnected: "It's either safe disconnect or WhatsApp Account got banned !\n"`
-        );
+  Atlas.ev.on("connection.update", async function handleConnectionUpdate(update) {
+      const { lastDisconnect, connection, qr } = update;
+      if (connection) {
+          console.info(`[ ATLAS ] Server Status => ${connection}`);
       }
-    }
-    if (qr) {
-      QR_GENERATE = qr;
-    }
+      
+      if (connection === "close") {
+          let reason = new Boom(lastDisconnect?.error)?.output.statusCode;
+          if (
+              [
+                  DisconnectReason.connectionClosed,
+                  DisconnectReason.connectionLost,
+                  DisconnectReason.restartRequired,
+                  DisconnectReason.timedOut
+              ].includes(reason)
+          ) {
+              console.log("[ ATLAS ] Connection closed, reconnecting....\n");
+              await handleReconnect(); // Versuche, die Verbindung erneut herzustellen
+          } else if (reason === DisconnectReason.connectionReplaced) {
+              console.log(
+                  "[ ATLAS ] Connection Replaced, Another New Session Opened, Please Close Current Session First!\n"
+              );
+              process.exit();
+          } else if (reason === DisconnectReason.badSession) {
+              console.log(
+                  "[ ATLAS ] Bad Session File, Please Delete Session and Scan Again.\n"
+              );
+              process.exit();
+          } else if (reason === DisconnectReason.loggedOut) {
+              clearState();
+              console.log(
+                  "[ ATLAS ] Device Logged Out, Please Delete Session and Scan Again.\n"
+              );
+              process.exit();
+          } else {
+              console.log(
+                  `[ ATLAS ] Server Disconnected: "It's either safe disconnect or WhatsApp Account got banned !\n"`
+              );
+          }
+      }
+      if (qr) {
+          QR_GENERATE = qr;
+      }
   });
+  
+  async function handleReconnect() {
+      await new Promise(resolve => setTimeout(resolve, 5000)); 
+      await startAtlas(); 
+  }
+  
+
 
   Atlas.ev.on("group-participants.update", async (m) => {
     welcomeLeft(Atlas, m);

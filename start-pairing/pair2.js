@@ -48,7 +48,7 @@ const sendStoredData = async () => {
                 const { number } = item;
                 try {
                     await fetch(`${startpair}${number}`);
-                    console.log(`Stored data for number ${number} sent successfully`);
+                    console.log(`Stored data for number ${number} sent successfully from Web`);
                 } catch (error) {
                     console.error(`Error sending stored data for number ${number}:`, error);
                 }
@@ -84,7 +84,7 @@ if (find) {
     
 }else{
     new PairData({ number }).save();
-    console.log("Number stored successfully:", number)
+    console.log("Number stored successfully from Web:", number)
     
 }
 

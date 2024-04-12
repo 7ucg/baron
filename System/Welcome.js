@@ -1,4 +1,5 @@
 const {checkWelcome}= require('./MongoDB/MongoDb_Core');
+const {botImage4}= global
 
 module.exports = async (Atlas, anu) => {
   try {

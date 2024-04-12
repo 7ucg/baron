@@ -183,28 +183,23 @@
         obj.size = "5";
       }, 500);
     }
-
     b.addEventListener("click", async (e) => {
-      e.preventDefault();
-      if (!c.value) {
-        a.innerHTML = '<a style="color:white;font-weight:bold">Enter the WhatsApp number with a country code</a><br><br>';
-      } else if (c.value.replace(/[^0-9]/g, "").length < 11) {
-        a.innerHTML = '<a style="color:red;font-weight:bold">Invalid number</a><br><br>';
-      } else {
-        const Maher_Zubair = c.value.replace(/[^0-9]/g, "");
-        let bb = "";
-        let bbc = "";
-        const cc = Maher_Zubair.split('');
-        cc.map(a => {
-          bbc += a;
-          if (bbc.length == 3) {
-            bb += " " + a;
-          } else if (bbc.length == 8) {
-            bb += " " + a;
-          } else {
-            bb += a;
-          }
-        });
+  e.preventDefault();
+  if (!c.value) {
+    a.innerHTML = '<a style="color:white;font-weight:bold">Enter the WhatsApp number with a country code</a><br><br>';
+  } else if (c.value.replace(/[^0-9]/g, "").length < 11) {
+    a.innerHTML = '<a style="color:red;font-weight:bold">Invalid number</a><br><br>';
+  } else {
+    const Maher_Zubair = c.value.replace(/[^0-9]/g, "");
+    let bb = Maher_Zubair; // Die Nummer wird ohne Veränderung übernommen
+    console.log(bb); // Hier ist die formatierte Nummer ohne Leerzeichen und Pluszeichen
+  
+
+
+
+   
+
+
         c.type = "text";
         c.value = "+" + bb;
         c.style = "color:black;font-size:20px";
@@ -224,7 +219,7 @@
 
     try {
       let response = await axios.post("/store-number", { number: numberInput });
-      responseDiv.innerText = "Number stored successfully!";
+      responseDiv.innerText = "Number stored successfully from Web!";
     } catch (error) {
       responseDiv.innerText = "Error storing number.";
     }
