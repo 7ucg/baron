@@ -22,11 +22,12 @@ global.owner = gg.split(",");
 
 
 //
-global.Owner = ["4365022989060"];         
+global.Owner = ["4365022989060"];   
+global.owner = ["4365022989060"];        
 global.OwnerNumber = [ "4365022989060"];   
 global.ownertag = [ "4365022989060"];
 global.OwnerName = "Baron";
-global.BotName = "Tool-BOT";
+global.botName = "Atlas";
 global.packname = "By Tool Bot";                             //Do not change.
 global.author = "Baron";                               //Do not change.
 

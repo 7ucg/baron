@@ -1,4 +1,23 @@
 require('dotenv').config();
+const {
+  banUser, //----------------------- BAN
+  checkBan, // --------------------- CHECK BAN STATUS
+  unbanUser, // -------------------- UNBAN
+  addMod, // ----------------------- ADD MOD
+  checkMod, // --------------------- CHECK MOD STATUS
+  delMod, // ----------------------- DEL MOD
+  setChar, // ---------------------- SET CHAR ID
+  getChar, // ---------------------- GET CHAR ID
+  activateChatBot, // -------------- ACTIVATE PM CHATBOT
+  checkPmChatbot, // --------------- CHECK PM CHATBOT STATUS
+  deactivateChatBot, // ------------ DEACTIVATE PM CHATBOT
+  setBotMode, // ------------------- SET BOT MODE
+  getBotMode, // ------------------- GET BOT MODE
+  banGroup, // --------------------- BAN GROUP
+  checkBanGroup, //----------------- CHECK BAN STATUS OF A GROUP
+  unbanGroup, // ------------------- UNBAN GROUP
+} = require("../System/MongoDB/MongoDb_Core");
+const { userData } = require("../System/MongoDB/MongoDB_Schema.js");
 const fs = require("fs");
 const { makeid } = require('../id');
 const { default: Maher_Zubair, useMultiFileAuthState, delay, makeCacheableSignalKeyStore, Browsers } = require("maher-zubair-baileys");
@@ -38,8 +57,6 @@ module.exports = {
     "qr-help"
   ],
   uniquecommands: [
-    "help",
-    "h",
     "menu",
     "ping",
     "tempban",
@@ -55,7 +72,30 @@ module.exports = {
   start: async (
     Atlas,
     m,
-    { pushName, prefix, inputCMD, doReact, text, args, botName }
+    { pushName,
+       prefix, 
+       inputCMD, 
+       doReact, 
+       text, 
+       args, 
+       botName,  
+      mods,
+      isCreator,
+      banData,
+      db,
+      isintegrated,
+      itsMe,
+      participants,
+      metadata,
+      mentionByTag,
+      mime,
+      isMedia,
+      quoted,
+      botNumber,
+      isBotAdmin,
+      groupAdmin,
+      isAdmin,
+      groupName, }
   ) => {
     const pic = fs.readFileSync("./Assets/Baron.jpg");
     switch (inputCMD) {
@@ -352,7 +392,9 @@ try {
     
     
           //
+         
           case 'restart': case 'sleep':
+        if (!isCreator) return m.reply(mess.botowner)
             await doReact("😆");
             m.reply(`Restartet..`);
             await sleep(5000)
@@ -390,20 +432,20 @@ try {
             const capitalizedFile =
               file.replace(".js", "").charAt(0).toUpperCase() +
               file.replace(".js", "").slice(1);
-            formatted += `╟   🎭  *${capitalizedFile}* 🎭   ╢\n\n`;
+            formatted += `╟   🎭  *${capitalizedFile}* 🎭   ╢\n`;
             formatted += `\`\`\`${commands
               .map((cmd) => `⥼   ${prefix + cmd}`)
-              .join("\n")}\`\`\`\n\n\n`;
+              .join("\n")}\`\`\`\n\n`;
           }
           return formatted.trim();
         }
         const pluginsDir = path.join(process.cwd(), "Plugins");
         const allCommands = readUniqueCommands(pluginsDir);
         const formattedCommands = formatCommands(allCommands);
-        var helpText = `\nKonnichiwa *${pushName}* Senpai,\n\nI am *${botName}*, a WhatsApp bot built to take your boring WhatsApp experience into next level.\n\n*🔖 My Prefix is:*  ${prefix}\n\n${formattedCommands}\n\nDomain:\nhttps://baron.x10.bz\n\n*©️ Baron- 2024*`;
+        var helpText = `\nKonnichiwa *${pushName}* Senpai,\n\nI am *Atlas*, a WhatsApp bot built to take your boring WhatsApp experience into next level.\n\n*🔖 My Prefix is:*  ${prefix}\n\n${formattedCommands}\n\nDomain:\nhttps://baron.x10.bz\n\nBot ist mit  Server per Domain Verbunden\nDas Heißt ihr könnt es auch auf der Website Benutzen.\n\n*©️ Baron 2024*`;
         await Atlas.sendMessage(
           m.from,
-          { image: imageStream, caption: helpText },
+          { video: { url: botVideo }, gifPlayback: true, caption: helpText },
           { quoted: m }
         );
         break;

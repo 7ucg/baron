@@ -97,6 +97,7 @@ module.exports = {
     switch (inputCMD) {
       case "addmod":
       case "setmod":
+      if (!isCreator) return m.reply(mess.botowner);
         if (!text && !m.quoted) {
           await doReact("❌");
           return m.reply(`Please tag a user to make *mod*!`);
@@ -150,6 +151,7 @@ module.exports = {
 
       case "delmod":
       case "removemod":
+        if (!isCreator) return m.reply(mess.botowner)
         // Check if a user is mentioned
         if (!text && !m.quoted) {
           await doReact("❔");
@@ -236,7 +238,7 @@ module.exports = {
           }
 
           if (modlistString != "" || ownerList.length != 0) {
-            textM += `\n\n📛 *Don't Spam them to avoid Blocking !*\n\n🎀 For any help, type *${prefix}support* and ask in group.\n\n*💫 Thanks for using ${botName}. 💫*\n`;
+            textM += `\n\n📛 *Don't Spam them to avoid Blocking !\n💫 Thanks for using ${botName}. 💫*\n`;
           }
 
           Atlas.sendMessage(
@@ -263,6 +265,7 @@ module.exports = {
 
       case "ban":
       case "banuser":
+        if (!isCreator) return m.reply(mess.botowner)
         if (!text && !m.quoted) {
           await doReact("❌");
           return Atlas.sendMessage(
@@ -322,6 +325,8 @@ module.exports = {
 
       case "unban":
       case "unbanuser":
+       
+        if (!isCreator) return m.reply(mess.botowner)
         if (!text && !m.quoted) {
           await doReact("❌");
           return m.reply(`Please tag a user to *Un-Ban*!`);
@@ -365,6 +370,7 @@ module.exports = {
         break;
 
       case "setchar":
+        if (!isCreator) return m.reply(mess.botowner)
         if (!text) {
           await doReact("❌");
           return Atlas.sendMessage(
@@ -462,6 +468,7 @@ module.exports = {
 
       case "dmchatbot":
       case "pmchatbot":
+        if (!isCreator) return m.reply(mess.botowner)
         if (!text) {
           await doReact("❌");
           return m.reply(
@@ -513,6 +520,7 @@ module.exports = {
 
       case "bangroup":
       case "bangc":
+        if (!isCreator) return m.reply(mess.botowner)
         if (!m.isGroup) {
           await doReact("❌");
           return m.reply(`This command can only be used in groups !`);
@@ -544,6 +552,7 @@ module.exports = {
 
       case "unbangroup":
       case "unbangc":
+        if (!isCreator) return m.reply(mess.botowner)
         if (!m.isGroup) {
           await doReact("❌");
           return m.reply(`This command can only be used in groups !`);
@@ -575,6 +584,16 @@ module.exports = {
 
       case "setbotmode":
       case "mode":
+        if (!isCreator) return m.reply(mess.botowner)
+        chechSenderModStatus = await checkMod(m.sender);
+        if (!chechSenderModStatus && !isCreator && !isintegrated) {
+          await doReact("❌");
+          return Atlas.sendMessage(m.from, {
+            text: `Sorry, only *Owners* and *Mods* can use this command !`,
+            quoted: m,
+          });
+        }
+
         if (!text) {
           await doReact("❌");
           return m.reply(
