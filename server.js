@@ -49,7 +49,7 @@ if (cluster.isMaster) {
     require('dotenv').config(); // Load environment variables from .env file
 
     const app = express();
-    const port = process.env.PORT || 8000; // Use environment variable or default port
+    const port = process.env.PORT || 10000; // Use environment variable or default port
 
     // MongoDB connection string from environment variable
     const mongoURI = process.env.MONGODB_URI;
