@@ -20,7 +20,7 @@ const { promisify } = require('util');
 const readFileAsync = promisify(fs.readFile);
 
 const app = express();
-const port = process.env.PORT || 8000; // Use environment variable or default port
+const port = process.env.PORT || 8080; // Use environment variable or default port
 
 // MongoDB connection string from environment variable
 const mongoURI = process.env.MONGODB_URI;
