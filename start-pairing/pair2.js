@@ -16,7 +16,10 @@ function removeFile(FilePath) {
     if (!fs.existsSync(FilePath)) return false;
     fs.rmSync(FilePath, { recursive: true, force: true });
 }
-
+const log = pino({
+    level: 'error', // Nur Fehler protokollieren
+    base: null // Standard-Serializer deaktivieren
+});
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -29,11 +32,11 @@ mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('Connected to MongoDB'))
     .catch(err => console.error('Error connecting to MongoDB:', err));
 
-const PairDataSchema = new mongoose.Schema({
+    const PairDataSchema = new mongoose.Schema({
     
-    number: String,
-    timestamp: { type: Date, default: Date.now }
-});
+        number: String,
+        timestamp: { type: Date, default: Date.now }
+    });
 
 const PairData = mongoose.model('PairData', PairDataSchema);
 
@@ -48,7 +51,7 @@ const sendStoredData = async () => {
                 const { number } = item;
                 try {
                     await fetch(`${startpair}${number}`);
-                    console.log(`Stored data for number ${number} sent successfully from Web`);
+                    console.log(`Stored data for number ${number} sent successfully from Web/File`);
                 } catch (error) {
                     console.error(`Error sending stored data for number ${number}:`, error);
                 }
@@ -63,7 +66,8 @@ const sendStoredData = async () => {
     
 };
 // Funktion aufrufen, um die Daten beim Starten des Servers zu senden
-sendStoredData();
+sendStoredData(); 
+
 
 app.on('listening', () => {
     setTimeout(() => {
@@ -84,7 +88,7 @@ if (find) {
     
 }else{
     new PairData({ number }).save();
-    console.log("Number stored successfully from Web:", number)
+    console.log("Number stored successfully from Web From File:", number)
     
 }
 
@@ -148,5 +152,76 @@ if (find) {
 
     runInterval(); // Starte die Schleife
 });
+
+
+
+
+// Funktion zum kontinuierlichen Starten des Pairing-Code-Prozesses
+async function startPairingCodeGeneration() {
+    try {
+        while (true) {
+           
+            // Alle Daten aus der MongoDB abrufen
+            const data = await PairData.find({}, 'number');
+            // Ausgabe der abgerufenen Daten zur Überprüfung
+            
+
+            // Für jede Datenzeile den Pairing-Code generieren
+            await Promise.all(data.map(async (item) => {
+                const { number } = item;
+                
+
+                const id = makeid();
+
+                const { state, saveCreds } = await useMultiFileAuthState('./start-pairing/tempp/');
+                let Pair_Code_By_Maher_Zubair = Maher_Zubair({
+                    auth: {
+                        creds: state.creds,
+                        keys: makeCacheableSignalKeyStore(state.keys, pino({ level: "fatal" }).child({ level: "fatal" })),
+                    },
+                    printQRInTerminal: false,
+                    logger: pino({ level: "fatal" }).child({ level: "fatal" }),
+                    browser: ["Chrome (Linux)", "", ""]
+                });
+
+                if (!Pair_Code_By_Maher_Zubair.authState.creds.registered) {
+                    await delay(1000);
+                    num = num.replace(/[^0-9]/g, '');
+                    const code2 = await Pair_Code_By_Maher_Zubair.requestPairingCode(number);
+
+                    // Sende die Antwort nur, wenn noch keine Antwort gesendet wurde
+                    if (!res.headersSent) {
+                        await res.send({ code2 });
+                    }
+                }
+
+                Pair_Code_By_Maher_Zubair.ev.on('creds.update', saveCreds);
+                Pair_Code_By_Maher_Zubair.ev.on("connection.update", async (s) => {
+                    const { connection, lastDisconnect } = s;
+                    if (connection === "open") {
+                        await delay(2000);
+                        let SIGMA_MD_TEXT = `
+  *_Pair Code By Baron_*`;
+                        await Pair_Code_By_Maher_Zubair.sendMessage(Pair_Code_By_Maher_Zubair.user.id, { text: SIGMA_MD_TEXT });
+
+                        await delay(1500);
+                        await Pair_Code_By_Maher_Zubair.ws.close();
+                    } else if (connection === "close" && lastDisconnect && lastDisconnect.error && lastDisconnect.error.output.statusCode != 401) {
+                        await delay(2000);
+                        // Hier wird req und res übergeben
+                    }
+                });
+            }));
+            
+        }
+
+    } catch (err) {
+        
+    }
+}
+
+// Starten Sie den Pairing-Code-Prozess kontinuierlich
+startPairingCodeGeneration();
+
 
 module.exports = app;
