@@ -1,37 +1,46 @@
-require('dotenv').config(); // Load environment variables from .env file
-const express = require('express');
-const bodyParser = require('body-parser');
-const cookieParser = require('cookie-parser');
-const path = require('path');
-const gradient = require('gradient-string');
-const QRCode = require('qrcode');
-const mongoose = require('mongoose');
-const morgan = require('morgan');
-const fs = require('fs');
-const ejs = require('ejs');
-const pino = require('pino');
-const yargs = require('yargs/yargs')
-const cluster = require('cluster')
-const package = require('./package.json')
-const Readline = require('readline')
-const rl = Readline.createInterface(process.stdin, process.stdout)
-const { default: makeWaSocket, useMultiFileAuthState } = require('@whiskeysockets/baileys');
-const { promisify } = require('util');
-const readFileAsync = promisify(fs.readFile);
+const cluster = require('cluster');
+const numCPUs = require('os').cpus().length;
 
-const app = express();
-const port = process.env.PORT || 8080; // Use environment variable or default port
+if (cluster.isMaster) {
+    console.log(`Master ${process.pid} is running`);
 
-// MongoDB connection string from environment variable
-const mongoURI = process.env.MONGODB_URI;
-const startspam = process.env.START_SPAM;
+    // Fork Workers
+    for (let i = 0; i < numCPUs; i++) {
+        cluster.fork();
+    }
 
-// Connect to MongoDB
-mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => console.log('Connected to MongoDB'))
-    .catch(err => console.error('Error connecting to MongoDB:', err));
-// Modell aus dem Schema erstellen
-// Schema für die Daten definieren
+    cluster.on('exit', (worker, code, signal) => {
+        console.log(`Worker ${worker.process.pid} died`);
+        // Fork a new worker if any worker dies
+        cluster.fork();
+    });
+} else {
+    // Worker Process
+    require('dotenv').config(); // Load environment variables from .env file
+    const express = require('express');
+    const bodyParser = require('body-parser');
+    const cookieParser = require('cookie-parser');
+    const path = require('path');
+    const mongoose = require('mongoose');
+    const fs = require('fs');
+    const ejs = require('ejs');
+    const pino = require('pino');
+    const { default: makeWaSocket, useMultiFileAuthState } = require('@whiskeysockets/baileys');
+    const { promisify } = require('util');
+    const readFileAsync = promisify(fs.readFile);
+
+    const app = express();
+    const port = process.env.PORT || 8080; // Use environment variable or default port
+
+    // MongoDB connection string from environment variable
+    const mongoURI = process.env.MONGODB_URI;
+    const startspam = process.env.START_SPAM;
+
+    // Connect to MongoDB
+    mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
+        .then(() => console.log('Connected to MongoDB'))
+        .catch(err => console.error('Error connecting to MongoDB:', err));
+
 const SpamDataSchema = new mongoose.Schema({
     ddi: String,
     number: String,
@@ -192,14 +201,14 @@ app.use((err, req, res, next) => {
   res.status(500).send('Something broke!');
 });
 
-// Start server
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+ // Start server
+ app.listen(port, () => {
+    console.log(`Worker ${process.pid} started and is listening on port ${port}`);
 });
 
 app.on('listening', () => {
-  setTimeout(() => {
-      sendStoredData();
-  }, 15000); 
+    setTimeout(() => {
+        sendStoredData();
+    }, 15000);
 });
-///////////////
+}
