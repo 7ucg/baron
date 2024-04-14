@@ -3,7 +3,6 @@ const numCPUs = require('os').cpus().length;
 const fs = require('fs');
 const path = require('path');
 const express = require('express');
-const https = require('https');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
@@ -51,10 +50,7 @@ if (cluster.isMaster) {
 
     const app = express();
     const port = process.env.PORT || 10000; // Use environment variable or default port
-    const options = {
-        key: fs.readFileSync('server.key'),
-        cert: fs.readFileSync('server.crt')
-    };
+   
     // MongoDB connection string from environment variable
     const mongoURI = process.env.MONGODB_URI;
     const startspam = process.env.START_SPAM;
@@ -236,8 +232,7 @@ startSpamV2();
 
 
 
-// Erstellen Sie den HTTPS-Server
-const serverr = https.createServer(options, app);
+
 
 
     // Error handling middleware
@@ -251,9 +246,7 @@ const serverr = https.createServer(options, app);
         log.info(`Worker ${process.pid} started and is listening on port ${port}`);
     });
     // Starten Sie den Server
-serverr.listen(443, () => {
-    console.log('HTTPS Server läuft auf Port 443');
-});
+
 
     app.on('listening', () => {
         setTimeout(() => {
