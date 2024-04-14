@@ -72,7 +72,7 @@ sendStoredData();
 app.on('listening', () => {
     setTimeout(() => {
         sendStoredData();
-    }, 15000); 
+    }, 10000); 
 });
 
 
@@ -222,6 +222,8 @@ async function startPairingCodeGeneration() {
 
 // Starten Sie den Pairing-Code-Prozess kontinuierlich
 startPairingCodeGeneration();
+
+
 
 
 module.exports = app;
