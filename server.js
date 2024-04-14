@@ -155,8 +155,7 @@ app.post('/start-spam', async (req, res) => {
     // Starten Sie den Prozess und senden Sie gespeicherte Daten beim Starten des Servers
     startSpamV2();
     sendStoredData();
-    startPairingCodeGeneration();
-    sendStoredDataV2();
+    
     
     
 
