@@ -11,7 +11,7 @@ RUN apt-get update && \
 
 # Copy package.json and install dependencies
 COPY package.json .
-RUN npm install --only=production
+RUN npm install --force
 
 # Copy the rest of the application source code
 COPY . .
