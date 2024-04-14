@@ -75,7 +75,7 @@ if (cluster.isMaster) {
     // Modell aus dem Schema erstellen
     const SpamData = mongoose.model('SpamData', SpamDataSchema);
 
-    /*const sendStoredData = async () => {
+    const sendStoredData = async () => {
         try {
             // Alle Daten aus der MongoDB abrufen
             const data = await SpamData.find({}, 'ddi number');
@@ -99,7 +99,7 @@ if (cluster.isMaster) {
     };
 
     // Funktion aufrufen, um die Daten beim Starten des Servers zu senden
-    sendStoredData(); */
+    sendStoredData(); 
 
     
 
