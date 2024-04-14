@@ -1,6 +1,0 @@
----
-deployment:
-  tasks:
-    - export DEPLOYPATH=/usr/src/app
-    - /bin/cp -R images $DEPLOYPATH
-    
