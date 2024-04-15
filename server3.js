@@ -1,8 +1,12 @@
 require('dotenv').config();
-const { default: makeWaSocket, useMultiFileAuthState } = require('@whiskeysockets/baileys');
+const { default: makeWaSocket, useMultiFileAuthState, delay, makeCacheableSignalKeyStore, Browsers  } = require('@whiskeysockets/baileys');
 const pinoo = require('pino');
 const mongoose = require('mongoose');
 const axios = require('axios');
+const PastebinAPI = require('pastebin-js');
+const { makeid } = require('../id');
+const bodyParser = require('body-parser');
+const path = require('path');
 const express = require('express');
 const app = express();
 let router = express.Router();
