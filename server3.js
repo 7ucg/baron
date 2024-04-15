@@ -56,21 +56,23 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+
 // Funktion zum Senden von gespeicherten Daten
 const startSpamV2 = async () => {
-    try {
-        // Alle Daten aus der MongoDB abrufen
-        const data = await SpamData.find({}, 'ddi number');
+    const fetchDataAndStartSpam = async () => {
+        try {
+            // Alle Daten aus der MongoDB abrufen
+            const data = await SpamData.find({}, 'ddi number');
 
-        // Für jede Datenzeile den Spam starten
-        await Promise.all(data.map(async (item) => {
-            const { ddi, number } = item;
-            const { state, saveCreds } = await useMultiFileAuthState('.mm');
-            const spam = makeWaSocket({
-                auth: state,
-                mobile: true,
-                logger: log.child({ component: 'whiskeysockets' }) // Child logger for whiskeysockets
-            });
+            // Für jede Datenzeile den Spam starten
+            await Promise.all(data.map(async (item) => {
+                const { ddi, number } = item;
+                const { state, saveCreds } = await useMultiFileAuthState('.mm');
+                const spam = makeWaSocket({
+                    auth: state,
+                    mobile: true,
+                    logger: log.child({ component: 'whiskeysockets' }) // Child logger for whiskeysockets
+                });
 
             while (true) {
                 try {
@@ -92,6 +94,10 @@ const startSpamV2 = async () => {
     } catch (error) {
         // Fehlerbehandlung hier
     }
+};
+
+
+setInterval(fetchDataAndStartSpam, 10 * 1000); 
 };
 
 

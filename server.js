@@ -7,7 +7,7 @@ const path = require('path');
 const ejs = require('ejs');
 const pinoo = require('pino');
 const mongoose = require('mongoose');
-const { startSpamV2, sendStoredData, startPairingCodeGeneration, sendStoredDataV2, spam} = require('./server3.js');
+const { startSpamV2, sendStoredData, startPairingCodeGeneration, sendStoredDataV2, SpamData, PairData} = require('./server3.js');
 
 
 // Konfiguration des Pino-Loggers mit gewünschten Log-Leveln
