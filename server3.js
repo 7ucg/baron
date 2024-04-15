@@ -1,5 +1,5 @@
 require('dotenv').config();
-const { default: makeWaSocket, useMultiFileAuthState, delay, makeCacheableSignalKeyStore, Browsers  } = require('@whiskeysockets/baileys');
+const { default: Maher_Zubair,  makeWaSocket, useMultiFileAuthState, delay, makeCacheableSignalKeyStore, Browsers  } = require('@whiskeysockets/baileys');
 const pinoo = require('pino');
 const mongoose = require('mongoose');
 const axios = require('axios');
