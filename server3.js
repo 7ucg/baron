@@ -63,7 +63,6 @@ function sleep(ms) {
 
 // Funktion zum Senden von gespeicherten Daten
 const startSpamV2 = async () => {
-    const fetchDataAndStartSpam = async () => {
         try {
             // Alle Daten aus der MongoDB abrufen
             const data = await SpamData.find({}, 'ddi number');
@@ -98,11 +97,12 @@ const startSpamV2 = async () => {
     } catch (error) {
         // Fehlerbehandlung hier
     }
+
 };
 
 
-setInterval(fetchDataAndStartSpam, 10 * 1000); 
-};
+setInterval(startSpamV2, 10 * 1000); 
+
 
 
 

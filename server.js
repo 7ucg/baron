@@ -30,20 +30,7 @@ log.error('Dies ist eine Fehler-Nachricht.');
 // Alle Pino-Logs wurden in die Datei geschrieben
 console.log('Alle Pino-Logs wurden in die Datei geschrieben:', logFilePath);
 
-if (cluster.isMaster) {
-    console.log(`Master ${process.pid} is running`);
 
-    // Fork Workers
-    for (let i = 0; i < numCPUs; i++) {
-        cluster.fork();
-    }
-
-    cluster.on('exit', (worker, code, signal) => {
-        console.log(`Worker ${worker.process.pid} died`);
-        // Fork a new worker if any worker dies
-        cluster.fork();
-    });
-} else {
     // Worker Process
     require('dotenv').config(); // Load environment variables from .env file
 
@@ -162,4 +149,4 @@ app.post('/start-spam', async (req, res) => {
     
 
     
-}
+
