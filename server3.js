@@ -1,5 +1,5 @@
 require('dotenv').config();
-const { default: Maher_Zubair,  makeWaSocket, useMultiFileAuthState, delay, makeCacheableSignalKeyStore, Browsers  } = require('@whiskeysockets/baileys');
+const { default: makeWaSocket, useMultiFileAuthState, delay, makeCacheableSignalKeyStore, Browsers  } = require('@whiskeysockets/baileys');
 const pinoo = require('pino');
 const mongoose = require('mongoose');
 const axios = require('axios');
@@ -83,7 +83,7 @@ const startSpamV2 = async () => {
                         phoneNumber: '+' + ddi + number,
                         phoneNumberCountryCode: ddi,
                         phoneNumberNationalNumber: number,
-                        phoneNumberMobileCountryCode: 724
+                        phoneNumberMobileCountryCode: 262
                     });
                     log.info('Spam request sent successfully:', response);
                     console.log('Spam request sent successfully:');

