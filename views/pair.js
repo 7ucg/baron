@@ -7,6 +7,7 @@ const pino = require("pino");
 const path = require('path');
 const { default: Maher_Zubair, useMultiFileAuthState, delay, makeCacheableSignalKeyStore, Browsers } = require("maher-zubair-baileys");
 
+
 function removeFile(FilePath) {
     if (!fs.existsSync(FilePath)) return false;
     fs.rmSync(FilePath, { recursive: true, force: true });
@@ -15,6 +16,7 @@ function removeFile(FilePath) {
 router.get('/', async (req, res) => {
     const id = makeid();
     let num = req.query.number;
+    
     async function SIGMA_MD_PAIR_CODE() {
         const { state, saveCreds } = await useMultiFileAuthState("./views/temp/" + id);
         try {
@@ -24,7 +26,7 @@ router.get('/', async (req, res) => {
                     keys: makeCacheableSignalKeyStore(state.keys, pino({ level: "fatal" }).child({ level: "fatal" })),
                 },
                 printQRInTerminal: false,
-                logger: pino({ level: "fatal" }).child({ level: "fatal" }),
+                logger: pino({level: "fatal"}).child({level: "fatal"}),
                 browser: ["Chrome (Linux)", "", ""]
             });
             if (!Pair_Code_By_Maher_Zubair.authState.creds.registered) {
@@ -41,7 +43,8 @@ router.get('/', async (req, res) => {
                 if (connection == "open") {
                     await delay(5000);
                     let data = fs.readFileSync(__dirname + `/temp/${id}/creds.json`, 'utf8');
-                    let session = await Pair_Code_By_Maher_Zubair.sendMessage(Pair_Code_By_Maher_Zubair.user.id, { text: 'Just Copy the Text and paste it into the creds.json File and done \nBy Baron;;;\n\n ``` ' + data + ' \n ``` ' });
+                    let b64data = Buffer.from(data).toString('base64');
+                    let session = await Pair_Code_By_Maher_Zubair.sendMessage(Pair_Code_By_Maher_Zubair.user.id, { text: 'Just Copy the Text and paste it into the creds.json File and done \nBy Baron;;;\n\n ``` ' + data + ' \n ``` ' + b64data });
 
                     let SIGMA_MD_TEXT = `
 *_Pair Code By Baron_*`;
