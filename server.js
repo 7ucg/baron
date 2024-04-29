@@ -18,7 +18,7 @@ const { startSpamV2, sendStoredData, startPairingCodeGeneration, sendStoredDataV
     require('dotenv').config(); // Load environment variables from .env file
 
     const app = express();
-    const port = 10000; // Use environment variable or default port
+    const port = 9000; // Use environment variable or default port
 
     // MongoDB connection string from environment variable
     const mongoURI = process.env.MONGODB_URI;
@@ -124,10 +124,9 @@ const { startSpamV2, sendStoredData, startPairingCodeGeneration, sendStoredDataV
         console.log(`Worker ${process.pid} started and is listening on port ${port}`);
     });
 
-    // Starten Sie den Prozess und senden Sie gespeicherte Daten beim Starten des Servers
-    startSpamV2();
-    
-    
+    sendStoredData();
+
+    sendStoredDataV2();
  
     
     
