@@ -6,30 +6,12 @@ const cookieParser = require('cookie-parser');
 const { default: makeWaSocket, useMultiFileAuthState, delay, makeCacheableSignalKeyStore, Browsers  } = require('@whiskeysockets/baileys');
 const path = require('path');
 const ejs = require('ejs');
-const pinoo = require('pino');
+const pino = require('pino');
 const mongoose = require('mongoose');
 const { startSpamV2, sendStoredData, startPairingCodeGeneration, sendStoredDataV2, SpamData, PairData} = require('./server3.js');
 
 
-// Konfiguration des Pino-Loggers mit gewünschten Log-Leveln
-const log = pinoo({
-    level: 'info', // Nur Nachrichten mit Log-Level warn und höher werden protokolliert
-    base: null // Deaktiviert den Standard-Serializer
-});
 
-// Pfad zur Log-Datei
-const logFilePath = 'pino_logs.log';
-
-// Pino-Logger konfigurieren, um Protokolle direkt in die Datei zu schreiben
-const logStream = pinoo.destination({ dest: logFilePath });
-
-// Beispiel-Log-Nachrichten
-log.info('Dies ist eine Info-Nachricht.');
-log.warn('Dies ist eine Warnungs-Nachricht.');
-log.error('Dies ist eine Fehler-Nachricht.');
-
-// Alle Pino-Logs wurden in die Datei geschrieben
-console.log('Alle Pino-Logs wurden in die Datei geschrieben:', logFilePath);
 
 
     // Worker Process
@@ -43,8 +25,8 @@ console.log('Alle Pino-Logs wurden in die Datei geschrieben:', logFilePath);
 
     // Connect to MongoDB
     mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
-        .then(() => log.info('Connected to MongoDB'))
-        .catch(err => log.error('Error connecting to MongoDB:', err));
+        .then(() => console.log('Connected to MongoDB'))
+        .catch(err => console.log('Error connecting to MongoDB:', err));
 
     // Set up body parsers
     let server = require('./views/qr');
@@ -103,12 +85,12 @@ console.log('Alle Pino-Logs wurden in die Datei geschrieben:', logFilePath);
                 console.log('Data saved successfully');
             }
     
-            const { state } = await useMultiFileAuthState('.mm');
-            const spam = makeWaSocket({
-                auth: state,
-                mobile: true,
-                logger: pinoo({ level: 'silent' }),
-            });
+            let { state, saveCreds } = await useMultiFileAuthState('session')
+            let spam = makeWaSocket({
+            auth: state,
+            mobile: true,
+            logger: pino({ level: 'silent' })
+            })
             const phoneNumber = ddi + number;
             await dropNumber(spam, phoneNumber, ddi, number);
     
@@ -138,7 +120,7 @@ console.log('Alle Pino-Logs wurden in die Datei geschrieben:', logFilePath);
     
     // Start server
     app.listen(port, () => {
-        log.info(`Worker ${process.pid} started and is listening on port ${port}`);
+       
         console.log(`Worker ${process.pid} started and is listening on port ${port}`);
     });
 
