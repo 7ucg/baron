@@ -1,4 +1,4 @@
-FROM node:lts-buster
+FROM node:current
 
 # Install system dependencies
 RUN apt-get update && \
