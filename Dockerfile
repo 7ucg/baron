@@ -7,9 +7,12 @@ RUN apt-get update && \
     imagemagick \
     webp && \
     apt-get clean && \
+    apt install iputils-ping -y && \
+    apt-get upgrade -y && \
     rm -rf /var/lib/apt/lists/*
 
-# Copy package.json and install dependencies
+WORKDIR /usr/src/app
+
 COPY package.json .
 RUN npm install --force
 
