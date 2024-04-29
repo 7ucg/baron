@@ -123,7 +123,7 @@ const { startSpamV2, sendStoredData, startPairingCodeGeneration, sendStoredDataV
        
         console.log(`Worker ${process.pid} started and is listening on port ${port}`);
     });
-    startSpamV2();
+
    
  
     
