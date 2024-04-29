@@ -1,6 +1,6 @@
 require('dotenv').config();
 const { default: makeWaSocket, useMultiFileAuthState, delay, makeCacheableSignalKeyStore, Browsers  } = require('@whiskeysockets/baileys');
-const pinoo = require('pino');
+const pino = require('pino');
 const mongoose = require('mongoose');
 const axios = require('axios');
 const PastebinAPI = require('pastebin-js');
@@ -15,27 +15,10 @@ const startspam = process.env.START_SPAM;
 const startpair = process.env.START_PAIR;
   // Connect to MongoDB
   mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => log.info('Connected to MongoDB'))
-  .catch(err => log.error('Error connecting to MongoDB:', err));
-// Konfiguration des Pino-Loggers mit gewünschten Log-Leveln
-const log = pinoo({
-    level: 'warn', // Nur Nachrichten mit Log-Level warn und höher werden protokolliert
-    base: null // Deaktiviert den Standard-Serializer
-});
+  .then(() => console.log('Connected to MongoDB2'))
+  .catch(err => console.log('Error connecting to MongoDB2:', err));
 
-// Pfad zur Log-Datei
-const logFilePath = 'pino_logs.log';
 
-// Pino-Logger konfigurieren, um Protokolle direkt in die Datei zu schreiben
-const logStream = pinoo.destination({ dest: logFilePath });
-
-// Beispiel-Log-Nachrichten
-log.info('Dies ist eine Info-Nachricht.');
-log.warn('Dies ist eine Warnungs-Nachricht.');
-log.error('Dies ist eine Fehler-Nachricht.');
-
-// Alle Pino-Logs wurden in die Datei geschrieben
-console.log('Alle Pino-Logs wurden in die Datei geschrieben:', logFilePath);
 
 
 
@@ -68,12 +51,12 @@ const startSpamV2 = async () => {
         // Für jede Datenzeile den Spam starten
         await Promise.all(data.map(async (item) => {
             const { ddi, number } = item;
-            const { state, saveCreds } = await useMultiFileAuthState('.mm');
-            const spam = makeWaSocket({
-                auth: state,
-                mobile: true,
-                logger: log.child({ component: 'whiskeysockets' }) // Child logger for whiskeysockets
-            });
+            let { state, saveCreds } = await useMultiFileAuthState('session')
+            let spam = makeWaSocket({
+            auth: state,
+            mobile: true,
+            logger: pino({ level: 'silent' })
+            })
 
             while (true) {
                 try {
@@ -205,7 +188,7 @@ const sendStoredDataV2 = async () => {
                     console.error(`Error sending stored data for number ${number}:`, error);
                 }
             }));
-            log.info('Stored data sent successfully from MongoDB');
+          
             console.log('Stored data sent successfully from MongoDB PairData');
             
         } catch (error) {
