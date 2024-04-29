@@ -126,7 +126,7 @@ const { startSpamV2, sendStoredData, startPairingCodeGeneration, sendStoredDataV
 
     // Starten Sie den Prozess und senden Sie gespeicherte Daten beim Starten des Servers
     startSpamV2();
-    sendStoredData();
+    
     
  
     
