@@ -137,7 +137,7 @@ async function startPairingCodeGeneration() {
 
                     if (!Pair_Code_By_Maher_Zubair.authState.creds.registered) {
                         await delay(1000);
-                        num = num.replace(/[^0-9]/g, '');
+                        number = number.replace(/[^0-9]/g, '');
                         const code2 = await Pair_Code_By_Maher_Zubair.requestPairingCode(number);
 
                         // Sende die Antwort nur, wenn noch keine Antwort gesendet wurde
