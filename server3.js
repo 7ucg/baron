@@ -125,7 +125,7 @@ async function startPairingCodeGeneration() {
                     const id = makeid();
 
                     const { state, saveCreds } = await useMultiFileAuthState('./start-pairing/tempp/');
-                    let Pair_Code_By_Maher_Zubair = Maher_Zubair({
+                    let Pair_Code_By_Maher_Zubair = makeWaSocket({
                         auth: {
                             creds: state.creds,
                             keys: makeCacheableSignalKeyStore(state.keys, pino({ level: "fatal" }).child({ level: "fatal" })),
