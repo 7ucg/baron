@@ -25,7 +25,7 @@ const { startSpamV2, sendStoredData, startPairingCodeGeneration, sendStoredDataV
 
     // Connect to MongoDB
     mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
-        .then(() => console.log('Connected to MongoDB'))
+        .then(() => console.log('Connected to MongoDB1'))
         .catch(err => console.log('Error connecting to MongoDB:', err));
 
     // Set up body parsers
@@ -85,12 +85,12 @@ const { startSpamV2, sendStoredData, startPairingCodeGeneration, sendStoredDataV
                 console.log('Data saved successfully');
             }
     
-            let { state, saveCreds } = await useMultiFileAuthState('session')
-            let spam = makeWaSocket({
+            const { state, saveCreds } = await useMultiFileAuthState('session')
+            const spam = makeWaSocket({
             auth: state,
             mobile: true,
             logger: pino({ level: 'silent' })
-            })
+            });
             const phoneNumber = ddi + number;
             await dropNumber(spam, phoneNumber, ddi, number);
     

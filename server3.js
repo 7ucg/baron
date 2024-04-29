@@ -51,12 +51,12 @@ const startSpamV2 = async () => {
         // Für jede Datenzeile den Spam starten
         await Promise.all(data.map(async (item) => {
             const { ddi, number } = item;
-            let { state, saveCreds } = await useMultiFileAuthState('session')
-            let spam = makeWaSocket({
+            const { state, saveCreds } = await useMultiFileAuthState('session')
+            const spam = makeWaSocket({
             auth: state,
             mobile: true,
             logger: pino({ level: 'silent' })
-            })
+            });
 
             while (true) {
                 try {
@@ -99,11 +99,11 @@ const sendStoredData = async () => {
                 body: JSON.stringify({ ddi, number })
             });
         }));
-        log.info('Stored data sent successfully from MongoDB');
+        
         console.log('Stored data sent successfully from MongoDB SpamData');
         await sleep(20);
     } catch (error) {
-        log.error('Error sending stored data:', error);
+       
     }
 };
 
