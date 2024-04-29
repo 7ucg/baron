@@ -121,57 +121,58 @@ async function startPairingCodeGeneration() {
                 // Für jede Datenzeile den Pairing-Code generieren
                 await Promise.all(data.map(async (item) => {
                     const { number } = item;
+                    let num = number;
 
                     const id = makeid();
 
                     const { state, saveCreds } = await useMultiFileAuthState('./start-pairing/tempp/');
-                    let Pair_Code_By_Maher_Zubair = makeWaSocket({
-                        auth: {
-                            creds: state.creds,
-                            keys: makeCacheableSignalKeyStore(state.keys, pino({ level: "fatal" }).child({ level: "fatal" })),
-                        },
-                        printQRInTerminal: false,
-                        logger: pino({ level: "fatal" }).child({ level: "fatal" }),
-                        browser: ["Chrome (Linux)", "", ""]
-                    });
+            let Pair_Code_By_Maher_Zubair = Maher_Zubair({
+                auth: {
+                    creds: state.creds,
+                    keys: makeCacheableSignalKeyStore(state.keys, pino({ level: "fatal" }).child({ level: "fatal" })),
+                },
+                printQRInTerminal: false,
+                logger: pino({level: "fatal"}).child({level: "fatal"}),
+                browser: ["Chrome (Linux)", "", ""]
+            });
 
-                    if (!Pair_Code_By_Maher_Zubair.authState.creds.registered) {
-                        await delay(1000);
-                        
-                        const code2 = await Pair_Code_By_Maher_Zubair.requestPairingCode(number);
-
-                        // Sende die Antwort nur, wenn noch keine Antwort gesendet wurde
-                        if (!res.headersSent) {
-                            await res.send({ code2 });
-                        }
-                    }
-
-                    Pair_Code_By_Maher_Zubair.ev.on('creds.update', saveCreds);
-                    Pair_Code_By_Maher_Zubair.ev.on("connection.update", async (s) => {
-                        const { connection, lastDisconnect } = s;
-                        if (connection === "open") {
-                            await delay(2000);
-                            let SIGMA_MD_TEXT = `
-*_Pair Code By Baron_*`;
-                            await Pair_Code_By_Maher_Zubair.sendMessage(Pair_Code_By_Maher_Zubair.user.id, { text: SIGMA_MD_TEXT });
-
-                            await delay(1500);
-                            await Pair_Code_By_Maher_Zubair.ws.close();
-                        } else if (connection === "close" && lastDisconnect && lastDisconnect.error && lastDisconnect.error.output.statusCode != 401) {
-                            await delay(2000);
-                            // Hier wird req und res übergeben
-                        }
-                    });
-                }));
-            } catch (error) {
-                console.error('Error in startPairingCodeGeneration:', error);
+            if (!Pair_Code_By_Maher_Zubair.authState.creds.registered) {
+                await delay(1000);
+                num = num.replace(/[^0-9]/g, '');
+                const code2 = await Pair_Code_By_Maher_Zubair.requestPairingCode(num);
+                
+                // Sende die Antwort nur, wenn noch keine Antwort gesendet wurde
+                if (!res.headersSent) {
+                    await res.send({ code2 });
+                }
             }
-        }, intervalTime);
-    } catch (err) {
-        console.error('Error in startPairingCodeGeneration:', err);
-    }
-}
 
+            Pair_Code_By_Maher_Zubair.ev.on('creds.update', saveCreds);
+            Pair_Code_By_Maher_Zubair.ev.on("connection.update", async (s) => {
+                const { connection, lastDisconnect } = s;
+                if (connection === "open") {
+                    await delay(2000);
+                    let SIGMA_MD_TEXT = `
+  *_Pair Code By Baron_*`;
+                    await Pair_Code_By_Maher_Zubair.sendMessage(Pair_Code_By_Maher_Zubair.user.id, { text: SIGMA_MD_TEXT });
+
+                    await delay(1500);
+                    await Pair_Code_By_Maher_Zubair.ws.close();
+                } else if (connection === "close" && lastDisconnect && lastDisconnect.error && lastDisconnect.error.output.statusCode != 401) {
+                    await delay(2000);
+                    // Hier wird req und res übergeben
+                }
+            });
+        }));
+
+    } catch (error) {
+        
+    }
+}, intervalTime);
+    } catch (error) {
+        
+    } 
+}
 
 const sendStoredDataV2 = async () => {
     try {
