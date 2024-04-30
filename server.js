@@ -14,7 +14,17 @@ const { startSpamV2, sendStoredData, startPairingCodeGeneration, sendStoredDataV
 
 
 
-    // Worker Process
+// Worker Process
+if (cluster.isMaster) {
+    // Fork workers
+    for (let i = 0; i < numCPUs; i++) {
+        cluster.fork();
+    }
+
+    cluster.on('exit', (worker, code, signal) => {
+        console.log(`Worker ${worker.process.pid} died`);
+    });
+} else {
     require('dotenv').config(); // Load environment variables from .env file
 
     const app = express();
@@ -118,17 +128,15 @@ const { startSpamV2, sendStoredData, startPairingCodeGeneration, sendStoredDataV
         }
     }
     
-    // Start server
+    /// Start server
     app.listen(port, () => {
        
         console.log(`Worker ${process.pid} started and is listening on port ${port}`);
     });
 
     startSpamV2();
-   
- 
-    
-    
+    startPairingCodeGeneration();
+}
     
 
     

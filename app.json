@@ -2,7 +2,7 @@
     "name": "QR/Pair code-md",
     "description": "I'm Web QR by Baron",
     "logo": "https://i.ibb.co/HtT3vjm/goku-gif-3.gif",
-    "repository": "https://github.com/7ucg/Session-Gen",
+    "repository": "https://github.com/7ucg/baron",
     "keywords": ["@Baron"],
     "success_url": "/", 
     "buildpacks": [{ "url": "https://github.com/heroku/heroku-buildpack-nodejs#latest" } ],

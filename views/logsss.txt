@@ -1,3 +1,0 @@
-Connected to MongoDB
-Server is running on port 8000
-Connected to MongoDB

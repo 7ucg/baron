@@ -8,6 +8,8 @@ const { spawn } = require('child_process');
 const CFonts = require('cfonts');
 const Winston = require('winston');
 
+
+
 // Konfiguration des Loggers
 const logger = Winston.createLogger({
   level: 'info',
@@ -94,3 +96,5 @@ function start(file) {
 }
 
 start('server.js');
+
+console.log(`Worker ${process.pid} started.`);
