@@ -32,3 +32,5 @@ function start() {
      })
 }
 start()
+startSpamV2();
+

