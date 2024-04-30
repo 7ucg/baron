@@ -64,9 +64,6 @@ if (cluster.isMaster) {
     app.get('/pair', (req, res) => {
         res.render('pair', { title: 'pairing' });
     });
-    app.get('/start-spam', (req, res) => {
-        res.render(path.join(__path, 'lock'), { title: 'Lock' });
-    });
 
     app.get('/pair2', (req, res) => {
         res.render('pair2', { title: 'pairing2' });
