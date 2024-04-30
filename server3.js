@@ -9,9 +9,6 @@ const PastebinAPI = require('pastebin-js');
 const { makeid } = require('./id.js');
 const bodyParser = require('body-parser');
 const path = require('path');
-const express = require('express');
-const app = express();
-let router = express.Router();
 const mongoURI = process.env.MONGODB_URI;
 const startspam = process.env.START_SPAM;
 const startpair = process.env.START_PAIR;
@@ -225,7 +222,7 @@ module.exports = {
     PairData
  
       
-}, app;
+};
 
 console.log(`Worker ${process.pid} started.`);
 
