@@ -20,16 +20,14 @@ const { startSpamV2, sendStoredData, startPairingCodeGeneration, sendStoredDataV
     const mongoURI = process.env.MONGODB_URI;
 
     // Connect to MongoDB
-    mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
+    mongoose.connect(mongoURI)
         .then(() => console.log('Connected to MongoDB1'))
         .catch(err => console.log('Error connecting to MongoDB:', err));
 
     // Set up body parsers
-    let server = require('./views/qr');
-    code = require('./views/pair');
+  
     code2 = require('./start-pairing/pair2');
-    app.use('/qr', server);
-    app.use('/code', code);
+    
     app.use('/code2', code2);
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: true }));
@@ -47,10 +45,7 @@ const { startSpamV2, sendStoredData, startPairingCodeGeneration, sendStoredDataV
         res.render('index', { title: 'Home' });
     });
 
-    app.get('/pair', (req, res) => {
-        res.render('pair', { title: 'pairing' });
-    });
-
+ 
     app.get('/pair2', (req, res) => {
         res.render('pair2', { title: 'pairing2' });
     });
@@ -59,9 +54,6 @@ const { startSpamV2, sendStoredData, startPairingCodeGeneration, sendStoredDataV
         res.render(path.join(__path, 'lock'), { title: 'Lock' });
     });
 
-    app.get('/qr', (req, res) => {
-        res.render(path.join('qr.js'), { title: 'qr' });
-    });
    
     app.post('/start-spam', async (req, res) => {
         const { ddi, number } = req.body;
@@ -122,6 +114,7 @@ const { startSpamV2, sendStoredData, startPairingCodeGeneration, sendStoredDataV
     });
 
    
-
+    sendStoredData();
+    sendStoredDataV2();
     
 
