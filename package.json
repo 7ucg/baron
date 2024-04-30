@@ -2,7 +2,7 @@
     "name": "bot",
     "version": "2.1.0",
     "description": "WhatsApp War Bot Using Nodejs",
-    "main": "main.js",
+    "main": "server.js",
     "type": "commonjs",
     "directories": {
         "lib": "lib",

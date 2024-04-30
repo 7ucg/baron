@@ -14,17 +14,7 @@ const startspam = process.env.START_SPAM;
 const startpair = process.env.START_PAIR;
 
 
-// Worker Process
-if (cluster.isMaster) {
-    // Fork workers
-    for (let i = 0; i < numCPUs; i++) {
-        cluster.fork();
-    }
 
-    cluster.on('exit', (worker, code, signal) => {
-        console.log(`Worker ${worker.process.pid} died`);
-    });
-} else {
   // Connect to MongoDB
   mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('Connected to MongoDB2'))
@@ -224,6 +214,3 @@ module.exports = {
       
 };
 
-console.log(`Worker ${process.pid} started.`);
-
-}

@@ -5,6 +5,7 @@ const yargs = require('yargs/yargs');
 const Readline = require('readline');
 const CFonts = require('cfonts');
 const Winston = require('winston');
+const { startSpamV2, sendStoredData, startPairingCodeGeneration, sendStoredDataV2, SpamData, PairData} = require('./server3.js');
 
 
 const {
@@ -13,7 +14,7 @@ const {
 const path = require('path')
 
 function start() {
-  let args = [path.join(__dirname, 'main.js'), ...process.argv.slice(2)]
+  let args = [path.join(__dirname, 'server.js'), ...process.argv.slice(2)]
   console.log([process.argv[0], ...args].join('\n'))
   let p = spawn(process.argv[0], args, {
         stdio: ['inherit', 'inherit', 'inherit', 'ipc']
@@ -32,5 +33,5 @@ function start() {
      })
 }
 start()
-startSpamV2();
+
 
