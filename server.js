@@ -113,4 +113,4 @@ const { startSpamV2, sendStoredData, startPairingCodeGeneration, sendStoredDataV
         console.log(`started and is listening on port ${port}`);
     });
 
- 
+startSpamV2();
