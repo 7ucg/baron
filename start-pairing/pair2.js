@@ -26,7 +26,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const mongoURI = process.env.MONGODB_URI;
 const startpair = process.env.START_PAIR;
 // Connect to MongoDB
-mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(mongoURI)
     .then(() => console.log('Connected to MongoDB'))
     .catch(err => console.error('Error connecting to MongoDB:', err));
 

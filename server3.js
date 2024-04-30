@@ -16,7 +16,7 @@ const startpair = process.env.START_PAIR;
 
 
   // Connect to MongoDB
-  mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
+  mongoose.connect(mongoURI)
   .then(() => console.log('Connected to MongoDB2'))
   .catch(err => console.log('Error connecting to MongoDB2:', err));
 
