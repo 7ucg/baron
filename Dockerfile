@@ -16,8 +16,8 @@ WORKDIR /usr/src/app
 COPY package.json .
 RUN npm install --force
 
-# Copy the rest of the application source code
+
 COPY . .
 
-# Set the default command to run the application
+
 CMD ["node", "."]

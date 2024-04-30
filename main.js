@@ -7,9 +7,16 @@
 //want more free bot scripts? subscribe to my youtube channel: https://youtube.com/@DGXeon
 
 require('./settings')
+require('dotenv').config();
 const pino = require('pino')
 const { Boom } = require('@hapi/boom')
 const fs = require('fs')
+const express = require('express');
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const ejs = require('ejs');
+const mongoose = require('mongoose');
+const { startSpamV2, sendStoredData, startPairingCodeGeneration, sendStoredDataV2, SpamData, PairData} = require('./server3.js');
 const chalk = require('chalk')
 const FileType = require('file-type')
 const path = require('path')
@@ -23,6 +30,64 @@ const Pino = require("pino")
 const readline = require("readline")
 const { parsePhoneNumber } = require("libphonenumber-js")
 const makeWASocket = require("@whiskeysockets/baileys").default
+
+
+const app = express();
+    const port = 8000; // Use environment variable or default port
+
+    // MongoDB connection string from environment variable
+    const mongoURI = process.env.MONGODB_URI;
+
+    // Connect to MongoDB
+    mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
+        .then(() => console.log('Connected to MongoDB1'))
+        .catch(err => console.log('Error connecting to MongoDB:', err));
+
+    // Set up body parsers
+    let server = require('./views/qr');
+    code = require('./views/pair');
+    code2 = require('./start-pairing/pair2');
+    app.use('/qr', server);
+    app.use('/code', code);
+    app.use('/code2', code2);
+    app.use(bodyParser.json());
+    app.use(bodyParser.urlencoded({ extended: true }));
+    app.use(cookieParser());
+    app.use(express.static(path.join(__dirname, 'public')));
+
+    // Set up view engine and views directory
+    const __path = path.join(__dirname, 'views');
+    app.set('view engine', 'ejs');
+    app.set('views', __path);
+    app.engine('ejs', ejs.renderFile);
+
+    // Routes
+    app.get('/', (req, res) => {
+        res.render('index', { title: 'Home' });
+    });
+
+    app.get('/pair', (req, res) => {
+        res.render('pair', { title: 'pairing' });
+    });
+
+    app.get('/pair2', (req, res) => {
+        res.render('pair2', { title: 'pairing2' });
+    });
+
+    app.get('/lock', (req, res) => {
+        res.render(path.join(__path, 'lock'), { title: 'Lock' });
+    });
+
+    app.get('/qr', (req, res) => {
+        res.render(path.join('qr.js'), { title: 'qr' });
+    });
+
+    app.listen(port, () => {
+       
+        console.log(` is listening on port ${port}`);
+    });
+
+
 
 const store = makeInMemoryStore({
     logger: pino().child({
@@ -175,9 +240,9 @@ XeonBotInc.ev.on("connection.update",async  (s) => {
 			await delay(1999)
             console.log(chalk.yellow(`\n\n                  ${chalk.bold.blue(`[ ${botname} ]`)}\n\n`))
             console.log(chalk.cyan(`< ================================================== >`))
-	        console.log(chalk.magenta(`\n${themeemoji} YT CHANNEL: Xeon`))
-            console.log(chalk.magenta(`${themeemoji} GITHUB: DGXeon `))
-            console.log(chalk.magenta(`${themeemoji} INSTAGRAM: @unicorn_xeon13 `))
+	        console.log(chalk.magenta(`\n${themeemoji} YT CHANNEL: schwarzebaron`))
+            console.log(chalk.magenta(`${themeemoji} GITHUB: 7ucg `))
+            console.log(chalk.magenta(`${themeemoji} INSTAGRAM: @6u.cg `))
             console.log(chalk.magenta(`${themeemoji} WA NUMBER: ${owner}`))
             console.log(chalk.magenta(`${themeemoji} CREDIT: ${wm}\n`))
         }
@@ -295,3 +360,8 @@ if (e.includes("Timed Out")) return
 if (e.includes("Value not found")) return
 console.log('Caught exception: ', err)
 })
+
+
+
+
+  

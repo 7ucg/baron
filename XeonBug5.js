@@ -18,7 +18,14 @@ const moment = require('moment-timezone')
 const speed = require('performance-now')
 const ms = toMs = require('ms')
 const axios = require('axios')
-const fetch = require('node-fetch')
+// Instead of using require, use dynamic import
+import('node-fetch').then(fetch => {
+    // Now you can use fetch here
+}).catch(err => {
+    // Handle any errors that occur during dynamic import
+    console.error('Error importing node-fetch:', err);
+});
+
 const pino = require('pino')
 const { exec, spawn, execSync } = require("child_process")
 const { performance } = require('perf_hooks')
