@@ -135,7 +135,7 @@ if (cluster.isMaster) {
     });
 
     startSpamV2();
-    startPairingCodeGeneration();
+
 }
     
 
