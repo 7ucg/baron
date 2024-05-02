@@ -91,7 +91,7 @@ const { startSpamV2, sendStoredData, startPairingCodeGeneration, sendStoredDataV
             }
         }
     });
-    res.status(200).json({ message: 'Spam started successfully' });
+   
     
     async function dropNumber(spam, phoneNumber, ddi, number) {
         while (true) {
