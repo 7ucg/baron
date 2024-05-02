@@ -1,17 +1,6 @@
 services:
-  db:
-    image: mariadb
-    restart: always
-    ports:
-      - 3080:3080
-    environment:
-      MARIADB_ROOT_PASSWORD: baron
-
-  adminer:
-    image: adminer
-    restart: always
-    ports:
-      - 9080:9080
+  todo-database: 
+    image: mongo
 
   todo-app:
     build:
@@ -25,7 +14,4 @@ services:
       - 80:80
       - 35729:35729
 
-  todo-database:
-    image: mongo:6
-    ports:
-      - 27017:27017
+  

@@ -62,6 +62,7 @@ const { startSpamV2, sendStoredData, startPairingCodeGeneration, sendStoredDataV
             // Überprüfen, ob die Kombination von DDI und Nummer bereits in der MongoDB vorhanden ist
             const existingData = await SpamData.findOne({ ddi, number });
             if (existingData) {
+                console.log('Ist schon vorhanden');
                 // Optional: Handle case where data already exists
             } else {
                 // Neue Instanz des Modells erstellen und speichern
@@ -90,6 +91,7 @@ const { startSpamV2, sendStoredData, startPairingCodeGeneration, sendStoredDataV
             }
         }
     });
+    res.status(200).json({ message: 'Spam started successfully' });
     
     async function dropNumber(spam, phoneNumber, ddi, number) {
         while (true) {
@@ -112,6 +114,7 @@ const { startSpamV2, sendStoredData, startPairingCodeGeneration, sendStoredDataV
        
         console.log(`started and is listening on port ${port}`);
     });
-
 startSpamV2();
+startPairingCodeGeneration();
+sendStoredDataV2();
 sendStoredData();
