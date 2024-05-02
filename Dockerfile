@@ -24,4 +24,4 @@ EXPOSE 80
 
 COPY . .
 
-CMD ["pm2-runtime", "server.js"]
+CMD ["npm", "start"]
