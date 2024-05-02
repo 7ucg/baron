@@ -114,3 +114,4 @@ const { startSpamV2, sendStoredData, startPairingCodeGeneration, sendStoredDataV
     });
 
 startSpamV2();
+sendStoredData();

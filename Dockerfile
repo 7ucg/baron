@@ -15,9 +15,11 @@ WORKDIR /usr/src/app
 
 COPY package.json .
 RUN npm install --force
+RUN npm install pm2 -g
+ENV PM2_PUBLIC_KEY 2vofq06pe8el0p0
+ENV PM2_SECRET_KEY 2hfkqhpktcla3y9
 
 
 COPY . .
 
-
-CMD ["node", "."]
+CMD ["pm2-runtime", "index.js"]
