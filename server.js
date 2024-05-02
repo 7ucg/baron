@@ -14,7 +14,7 @@ const { startSpamV2, sendStoredData, startPairingCodeGeneration, sendStoredDataV
     require('dotenv').config(); // Load environment variables from .env file
 
     const app = express();
-    const port = 9000; // Use environment variable or default port
+    const port = 80; // Use environment variable or default port
 
     // MongoDB connection string from environment variable
     const mongoURI = process.env.MONGODB_URI;
