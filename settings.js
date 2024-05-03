@@ -1,6 +1,11 @@
 
 const fs = require('fs')
-const chalk = require('chalk')
+import('chalk').then(fetch => {
+    // Now you can use fetch here
+}).catch(err => {
+    // Handle any errors that occur during dynamic import
+    console.error('Error importing chalk:', err);
+});
 
 //contact details
 global.ownernomer = "4365022989060"

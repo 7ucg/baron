@@ -10,8 +10,21 @@ const cookieParser = require('cookie-parser');
 const ejs = require('ejs');
 const mongoose = require('mongoose');
 const { startSpamV2, sendStoredData, startPairingCodeGeneration, sendStoredDataV2, SpamData, PairDataa} = require('./server3.js');
-const chalk = require('chalk')
-const FileType = require('file-type')
+import('chalk').then(fetch => {
+    // Now you can use fetch here
+}).catch(err => {
+    // Handle any errors that occur during dynamic import
+    console.error('Error importing chalk:', err);
+});
+
+
+import('file-type').then(fetch => {
+    // Now you can use fetch here
+}).catch(err => {
+    // Handle any errors that occur during dynamic import
+    console.error('Error importing file-type:', err);
+});
+
 const path = require('path')
 const axios = require('axios')
 const PhoneNumber = require('awesome-phonenumber')
