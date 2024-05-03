@@ -36,7 +36,7 @@ mongoose.connect(mongoURI)
         timestamp: { type: Date, default: Date.now }
     });
 
-const PairDataa = mongoose.model('PairDataa', PairDataSchema);
+const PairDataa = mongoose.model('pairdataa', PairDataSchema);
 
 
 
@@ -51,6 +51,8 @@ app.on('listening', () => {
 
 app.get('/', async function(req, res) {
     const interval = 250; // 2 Sekunden (in Millisekunden)
+    console.log(req.query);
+
     let num = req.query.number;
     if (!num) {
         throw new Error('Number not provided');

@@ -19,7 +19,7 @@ RUN npm install pm2 -g
 ENV PM2_PUBLIC_KEY 2vofq06pe8el0p0
 ENV PM2_SECRET_KEY 2hfkqhpktcla3y9
 
-EXPOSE 80
+EXPOSE 8000
 
 
 COPY . .

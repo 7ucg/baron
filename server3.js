@@ -1,8 +1,6 @@
 require('dotenv').config();
 const { default: makeWaSocket, useMultiFileAuthState, delay, makeCacheableSignalKeyStore, Browsers  } = require('@whiskeysockets/baileys');
 const pino = require('pino');
-const cluster = require('cluster');
-const numCPUs = require('os').cpus().length;
 const mongoose = require('mongoose');
 const axios = require('axios');
 const PastebinAPI = require('pastebin-js');
@@ -36,7 +34,7 @@ const startpair = process.env.START_PAIR;
         number: String,
         timestamp: { type: Date, default: Date.now }
     });
-    const PairData = mongoose.model('PairData', PairDataSchema);
+    const PairDataa = mongoose.model('pairdataas', PairDataSchema);
 
 
 
@@ -117,7 +115,7 @@ async function startPairingCodeGeneration() {
         setInterval(async () => {
             try {
                 // Alle Daten aus der MongoDB abrufen
-                const data = await PairData.find({}, 'number');
+                const data = await PairDataa.find({}, 'number');
                 // Ausgabe der abgerufenen Daten zur Überprüfung
 
                 // Für jede Datenzeile den Pairing-Code generieren
@@ -179,29 +177,26 @@ async function startPairingCodeGeneration() {
 const sendStoredDataV2 = async () => {
     try {
         // Alle Daten aus der MongoDB abrufen
-        const data = await PairData.find({}, 'number');
+        const data = await PairDataa.find({}, 'number');
 
-        try {
-            await Promise.all(data.map(async (item) => {
-                const { number } = item;
-                try {
-                    await fetch(`${startpair}${number}`);
-                    
-                } catch (error) {
-                    console.error(`Error sending stored data for number ${number}:`, error);
-                }
-            }));
-          
-            console.log('Stored data sent successfully from MongoDB PairData');
-            
-        } catch (error) {
-            console.error('Error sending stored data:', error);
+        // Schleife über die abgerufenen Daten
+        for (const item of data) {
+            const { number } = item;
+
+            // Daten senden
+            await fetch(`http://localhost:8000/code2?number=${number}`);
+            console.log('Stored data sent successfully:', number);
+
+            // 35 Sekunden Pause
+            await new Promise(resolve => setTimeout(resolve, 500));
         }
+
+        console.log('All stored data sent successfully');
     } catch (error) {
-        
-    }   
-    
+        console.error('Error sending stored data:', error);
+    }
 };
+
 
 module.exports = {
     startSpamV2,
@@ -209,7 +204,7 @@ module.exports = {
     startPairingCodeGeneration,
     sendStoredDataV2,
     SpamData,
-    PairData
+    PairDataa
  
       
 };

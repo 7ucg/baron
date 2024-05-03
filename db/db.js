@@ -19,7 +19,7 @@ const PairDataSchema = new mongoose.Schema({
     timestamp: { type: Date, default: Date.now }
 });
 
-const PairData = mongoose.model('PairData', PairDataSchema);
+const PairDataa = mongoose.model('pairdataas', PairDataSchema);
 
 
-module.exports = { SpamData, PairData };
+module.exports = { SpamData, PairDataa };

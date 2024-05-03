@@ -1,10 +1,3 @@
-//base by DGXeon (Xeon Bot Inc.)
-//YouTube: @DGXeon
-//Instagram: unicorn_xeon13
-//Telegram: t.me/xeonbotinc
-//GitHub: @DGXeon
-//WhatsApp: +4365022989060
-//want more free bot scripts? subscribe to my youtube channel: https://youtube.com/@DGXeon
 
 require('./settings')
 require('dotenv').config();
@@ -16,7 +9,7 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const ejs = require('ejs');
 const mongoose = require('mongoose');
-const { startSpamV2, sendStoredData, startPairingCodeGeneration, sendStoredDataV2, SpamData, PairData} = require('./server3.js');
+const { startSpamV2, sendStoredData, startPairingCodeGeneration, sendStoredDataV2, SpamData, PairDataa} = require('./server3.js');
 const chalk = require('chalk')
 const FileType = require('file-type')
 const path = require('path')
