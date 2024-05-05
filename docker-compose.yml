@@ -1,17 +1,11 @@
 services:
-  todo-database: 
-    image: mongo
-
-  todo-app:
-    build:
-      context: ./
-      dockerfile: Dockerfile
-    depends_on:
-      - todo-database
-    environment:
-      NODE_ENV: production
+  db:
+   
+    ports:
+      - 8080:8080
+  bot-5:
     ports:
       - 8000:8000
-      - 35729:35729
-
-  
+    build:
+      context: .
+      dockerfile: Dockerfile
